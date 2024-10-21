@@ -12,12 +12,13 @@ import java.util.Set;
 
 @Service
 public class UniversiteServiceImpl implements IUniversiteService{
-@Autowired
-    UniversiteRepository universiteRepository;
-@Autowired
-    DepartementRepository departementRepository;
-    public UniversiteServiceImpl() {
-        // TODO Auto-generated constructor stub
+    private final UniversiteRepository universiteRepository;
+    private final DepartementRepository departementRepository;
+    // Constructor injection
+    @Autowired
+    public UniversiteServiceImpl(UniversiteRepository universiteRepository, DepartementRepository departementRepository) {
+        this.universiteRepository = universiteRepository;
+        this.departementRepository = departementRepository;
     }
   public   List<Universite> retrieveAllUniversites(){
 return (List<Universite>) universiteRepository.findAll();
@@ -32,8 +33,8 @@ return  (universiteRepository.save(u));
     }
 
   public Universite retrieveUniversite (Integer idUniversite){
-Universite u = universiteRepository.findById(idUniversite).get();
-return  u;
+      return universiteRepository.findById(idUniversite)
+              .orElse(null);
     }
     public  void deleteUniversite(Integer idUniversite){
         universiteRepository.delete(retrieveUniversite(idUniversite));
@@ -42,12 +43,14 @@ return  u;
     public void assignUniversiteToDepartement(Integer idUniversite, Integer idDepartement){
         Universite u= universiteRepository.findById(idUniversite).orElse(null);
         Departement d= departementRepository.findById(idDepartement).orElse(null);
+        assert u != null;
         u.getDepartements().add(d);
         universiteRepository.save(u);
     }
 
     public Set<Departement> retrieveDepartementsByUniversite(Integer idUniversite){
 Universite u=universiteRepository.findById(idUniversite).orElse(null);
-return u.getDepartements();
+        assert u != null;
+        return u.getDepartements();
     }
 }
