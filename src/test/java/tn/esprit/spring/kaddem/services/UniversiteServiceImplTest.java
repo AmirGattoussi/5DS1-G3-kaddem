@@ -1,78 +1,87 @@
 package tn.esprit.spring.kaddem.services;
 
-import org.junit.jupiter.api.BeforeEach;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import tn.esprit.spring.kaddem.entities.Departement;
 import tn.esprit.spring.kaddem.entities.Universite;
-import tn.esprit.spring.kaddem.repositories.DepartementRepository;
-import tn.esprit.spring.kaddem.repositories.UniversiteRepository;
-import tn.esprit.spring.kaddem.services.UniversiteServiceImpl;
 
 import java.util.List;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@Slf4j
+@ExtendWith(SpringExtension.class)
 @SpringBootTest
 class UniversiteServiceImplTest {
 
     @Autowired
-    UniversiteRepository universiteRepository;
+    private IUniversiteService universiteService;
 
-    @Autowired
-    DepartementRepository departementRepository;
-
-    UniversiteServiceImpl universiteService;
+    private Universite universite;
 
     @BeforeEach
-    void setUp() {
-        universiteService = new UniversiteServiceImpl(universiteRepository, departementRepository);
+    public void setUp() {
+        universite = new Universite("Esprit University");
     }
 
     @Test
     void testAddUniversite() {
-        Universite universite = new Universite("Test University");
         Universite savedUniversite = universiteService.addUniversite(universite);
+        log.info("Added Universite: {}", savedUniversite);
 
-        assertNotNull(savedUniversite);
-        assertEquals("Test University", savedUniversite.getNomUniv());
+        assertNotNull(savedUniversite.getIdUniv());
+        assertEquals("Esprit University", savedUniversite.getNomUniv());
+
     }
 
     @Test
     void testRetrieveAllUniversites() {
         List<Universite> universites = universiteService.retrieveAllUniversites();
+        log.info("All Universites: {}", universites);
+
         assertNotNull(universites);
-        assertTrue(universites.size() >= 0);  // Adjust depending on initial DB state
+        assertTrue(universites.size() >= 0);
     }
 
     @Test
     void testRetrieveUniversite() {
-        Universite universite = universiteService.addUniversite(new Universite("Retrieve University"));
-        Universite foundUniversite = universiteService.retrieveUniversite(universite.getIdUniv());
+        Universite savedUniversite = universiteService.addUniversite(universite);
+        Universite foundUniversite = universiteService.retrieveUniversite(savedUniversite.getIdUniv());
+        log.info("Retrieved Universite: {}", foundUniversite);
 
         assertNotNull(foundUniversite);
-        assertEquals(universite.getIdUniv(), foundUniversite.getIdUniv());
+        assertEquals(savedUniversite.getIdUniv(), foundUniversite.getIdUniv());
+
     }
 
     @Test
     void testDeleteUniversite() {
-        Universite universite = universiteService.addUniversite(new Universite("To be deleted"));
-        universiteService.deleteUniversite(universite.getIdUniv());
+        Universite savedUniversite = universiteService.addUniversite(universite);
+        universiteService.deleteUniversite(savedUniversite.getIdUniv());
+        Universite deletedUniversite = universiteService.retrieveUniversite(savedUniversite.getIdUniv());
 
-        Universite deletedUniversite = universiteService.retrieveUniversite(universite.getIdUniv());
         assertNull(deletedUniversite);
+        log.info("Successfully deleted Universite with ID: {}", savedUniversite.getIdUniv());
     }
 
     @Test
     void testAssignUniversiteToDepartement() {
-        Universite universite = universiteService.addUniversite(new Universite("University for Dept"));
-        Departement departement = departementRepository.save(new Departement("Test Department"));
+        Universite savedUniversite = universiteService.addUniversite(universite);
+        Departement departement = new Departement("Computer Science");
+        universiteService.assignUniversiteToDepartement(savedUniversite.getIdUniv(), departement.getIdDepart());
 
-        universiteService.assignUniversiteToDepartement(universite.getIdUniv(), departement.getIdDepart());
+        Set<Departement> departements = universiteService.retrieveDepartementsByUniversite(savedUniversite.getIdUniv());
+        log.info("Assigned Departements: {}", departements);
 
-        Set<Departement> departements = universiteService.retrieveDepartementsByUniversite(universite.getIdUniv());
+        assertNotNull(departements);
         assertTrue(departements.contains(departement));
+
     }
 }
