@@ -4,10 +4,12 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java.io.Serializable;
 import java.util.Set;
+import java.util.HashSet;
 
 import javax.persistence.*;
 
 @Entity
+
 public class Universite implements Serializable{
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
@@ -17,7 +19,7 @@ public class Universite implements Serializable{
     @JsonIgnore
     private Set<Departement> departements;
     public Universite() {
-        // TODO Auto-generated constructor stub
+        this.departements = new HashSet<>(); // Initialize the set to avoid NullPointerException
     }
 
     public Universite(String nomUniv) {
@@ -48,6 +50,7 @@ public class Universite implements Serializable{
     public String getNomUniv() {
         return nomUniv;
     }
+
     public void setNomUniv(String nomUniv) {
         this.nomUniv = nomUniv;
     }
