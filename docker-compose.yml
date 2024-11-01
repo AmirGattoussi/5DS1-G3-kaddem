@@ -22,7 +22,7 @@ services:
     ports:
       - "8089:8089"
     environment:
-      SPRING_DATASOURCE_URL: jdbc:mysql://mysqldb:3306/kaddem?&createDatabaseIfNotExist=true&useUnicode=true&useJDBCComplian>      
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysqldb/kaddem
       SPRING_DATASOURCE_USERNAME: root
       SPRING_DATASOURCE_PASSWORD: root
       SPRING_JPA_SHOW_SQL: "true"
