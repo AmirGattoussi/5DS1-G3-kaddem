@@ -1,0 +1,38 @@
+version: '3.8'
+
+services:
+  mysqldb:
+    image: mysql:8.0   # or another version of MySQL if needed
+    container_name: mysqldb
+    environment:
+      MYSQL_ROOT_PASSWORD: root  # Same as in your application.properties
+      MYSQL_DATABASE: kaddem     # The database name in your connection string
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysqldb_data:/var/lib/mysql
+    networks:
+      - spring-mysql-network
+
+  springapp:
+    image: amirgattoussi/amirgattoussilahouel_5ds1_g3_kaddem  # Replace with your actual Docker image name
+    container_name: springapp
+    depends_on:
+      - mysqldb
+    ports:
+      - "8089:8089"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysqldb:3306/kaddem?&createDatabaseIfNotExist=true&useUnicode=true&useJDBCComplian>      
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: root
+      SPRING_JPA_SHOW_SQL: "true"
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update                                                                                   
+      SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT: org.hibernate.dialect.MySQL5Dialect
+    networks:
+      - spring-mysql-network
+
+volumes:
+  mysqldb_data:
+
+networks:
+  spring-mysql-network:
