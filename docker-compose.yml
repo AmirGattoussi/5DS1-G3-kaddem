@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   mysqldb:
-    image: mysql:5.0   # or another version of MySQL if needed
+    image: mysql:8.0   # or another version of MySQL if needed
     container_name: mysqldb
     environment:
       MYSQL_ROOT_PASSWORD: root  # Same as in your application.properties
