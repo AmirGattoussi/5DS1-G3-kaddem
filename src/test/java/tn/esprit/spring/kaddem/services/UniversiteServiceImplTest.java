@@ -74,14 +74,19 @@ class UniversiteServiceImplTest {
     @Test
     void testAssignUniversiteToDepartement() {
         Universite savedUniversite = universiteService.addUniversite(universite);
+
+        // Create and save the department first
         Departement departement = new Departement("Computer Science");
-        universiteService.assignUniversiteToDepartement(savedUniversite.getIdUniv(), departement.getIdDepart());
+        Departement savedDepartement = universiteService.addDepartement(departement); // Assuming you have this method
+
+        // Now assign the university to the department
+        universiteService.assignUniversiteToDepartement(savedUniversite.getIdUniv(), savedDepartement.getIdDepart());
 
         Set<Departement> departements = universiteService.retrieveDepartementsByUniversite(savedUniversite.getIdUniv());
         log.info("Assigned Departements: {}", departements);
 
         assertNotNull(departements);
-        assertTrue(departements.contains(departement));
-
+        assertTrue(departements.contains(savedDepartement)); // Check against the saved department
     }
+
 }
