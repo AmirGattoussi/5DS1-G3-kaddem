@@ -1,6 +1,8 @@
 package tn.esprit.spring.kaddem.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.io.Serializable;
 import java.util.Set;
@@ -8,6 +10,8 @@ import java.util.HashSet;
 
 import javax.persistence.*;
 
+@Setter
+@Getter
 @Entity
 
 public class Universite implements Serializable{
@@ -19,6 +23,7 @@ public class Universite implements Serializable{
     @JsonIgnore
     private Set<Departement> departements;
     public Universite() {
+
         this.departements = new HashSet<>(); // Initialize the set to avoid NullPointerException
     }
 
@@ -30,28 +35,6 @@ public class Universite implements Serializable{
     public Universite(Integer idUniv, String nomUniv) {
         super();
         this.idUniv = idUniv;
-        this.nomUniv = nomUniv;
-    }
-
-    public Set<Departement> getDepartements() {
-        return departements;
-    }
-
-    public void setDepartements(Set<Departement> departements) {
-        this.departements = departements;
-    }
-
-    public Integer getIdUniv() {
-        return idUniv;
-    }
-    public void setIdUniv(Integer idUniv) {
-        this.idUniv = idUniv;
-    }
-    public String getNomUniv() {
-        return nomUniv;
-    }
-
-    public void setNomUniv(String nomUniv) {
         this.nomUniv = nomUniv;
     }
 
