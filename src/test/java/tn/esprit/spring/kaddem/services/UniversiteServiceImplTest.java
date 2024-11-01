@@ -27,7 +27,7 @@ class UniversiteServiceImplTest {
     private Universite universite;
 
     @Test
-    void testAddUniversite() throws ParseException {
+    void testAddUniversite(){
         Universite savedUniversite = universiteService.addUniversite(universite);
         log.info("Added Universite: {}", savedUniversite);
 

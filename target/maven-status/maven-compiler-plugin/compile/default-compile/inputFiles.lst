@@ -20,11 +20,13 @@ C:\Users\gtsia\Documents\GitHub\Kaddem\src\main\java\tn\esprit\spring\kaddem\ser
 C:\Users\gtsia\Documents\GitHub\Kaddem\src\main\java\tn\esprit\spring\kaddem\repositories\EtudiantRepository.java
 C:\Users\gtsia\Documents\GitHub\Kaddem\src\main\java\tn\esprit\spring\kaddem\controllers\EtudiantRestController.java
 C:\Users\gtsia\Documents\GitHub\Kaddem\src\main\java\tn\esprit\spring\kaddem\controllers\UniversiteRestController.java
+C:\Users\gtsia\Documents\GitHub\Kaddem\src\main\java\tn\esprit\spring\kaddem\dto\UniversiteDTO.java
 C:\Users\gtsia\Documents\GitHub\Kaddem\src\main\java\tn\esprit\spring\kaddem\entities\DetailEquipe.java
 C:\Users\gtsia\Documents\GitHub\Kaddem\src\main\java\tn\esprit\spring\kaddem\services\IEtudiantService.java
 C:\Users\gtsia\Documents\GitHub\Kaddem\src\main\java\tn\esprit\spring\kaddem\repositories\UniversiteRepository.java
 C:\Users\gtsia\Documents\GitHub\Kaddem\src\main\java\tn\esprit\spring\kaddem\services\EquipeServiceImpl.java
 C:\Users\gtsia\Documents\GitHub\Kaddem\src\main\java\tn\esprit\spring\kaddem\repositories\ContratRepository.java
+C:\Users\gtsia\Documents\GitHub\Kaddem\src\main\java\tn\esprit\spring\kaddem\dto\UpdateUniversiteDTO.java
 C:\Users\gtsia\Documents\GitHub\Kaddem\src\main\java\tn\esprit\spring\kaddem\services\IContratService.java
 C:\Users\gtsia\Documents\GitHub\Kaddem\src\main\java\tn\esprit\spring\kaddem\repositories\EquipeRepository.java
 C:\Users\gtsia\Documents\GitHub\Kaddem\src\main\java\tn\esprit\spring\kaddem\entities\Option.java
