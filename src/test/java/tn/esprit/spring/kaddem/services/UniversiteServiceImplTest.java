@@ -1,41 +1,41 @@
-//package tn.esprit.spring.kaddem.services;
-//
-//import lombok.extern.slf4j.Slf4j;
-//import org.junit.jupiter.api.Test;
-//import org.junit.jupiter.api.BeforeEach;
-//import org.junit.jupiter.api.extension.ExtendWith;
-//import org.springframework.beans.factory.annotation.Autowired;
-//import org.springframework.boot.test.context.SpringBootTest;
-//import org.springframework.test.context.junit.jupiter.SpringExtension;
-//import org.springframework.test.context.junit4.SpringRunner;
-//import tn.esprit.spring.kaddem.entities.Universite;
-//
-//import java.text.ParseException;
-//import java.util.List;
-//import java.util.Set;
-//
-//import static org.junit.jupiter.api.Assertions.*;
-//
-//@Slf4j
-//@ExtendWith(SpringExtension.class)
-//@SpringBootTest
-//class UniversiteServiceImplTest {
-//
-//    @Autowired
-//    private IUniversiteService universiteService;
-//
-//    private Universite universite;
-//
-//    @Test
-//    void testAddUniversite(){
-//        Universite savedUniversite = universiteService.addUniversite(universite);
-//        log.info("Added Universite: {}", savedUniversite);
-//
-//        assertNotNull(savedUniversite.getIdUniv());
-//        assertEquals("Esprit University", savedUniversite.getNomUniv());
-//
-//    }
-//
+package tn.esprit.spring.kaddem.services;
+
+import lombok.extern.slf4j.Slf4j;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.test.context.junit4.SpringRunner;
+import tn.esprit.spring.kaddem.entities.Universite;
+
+import java.text.ParseException;
+import java.util.List;
+import java.util.Set;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+@Slf4j
+@ExtendWith(SpringExtension.class)
+@SpringBootTest
+class UniversiteServiceImplTest {
+
+    @Autowired
+    private IUniversiteService universiteService;
+
+    private Universite universite;
+
+    @Test
+    void testAddUniversite(){
+        Universite savedUniversite = universiteService.addUniversite(universite);
+        log.info("Added Universite: {}", savedUniversite);
+
+        assertNotNull(savedUniversite.getIdUniv());
+        assertEquals("Esprit University", savedUniversite.getNomUniv());
+
+    }
+
 ////    @Test
 ////    void testRetrieveAllUniversites() {
 ////        List<Universite> universites = universiteService.retrieveAllUniversites();
@@ -79,4 +79,4 @@
 ////        assertTrue(departements.contains(departement));
 ////
 ////    }
-//}
+}
