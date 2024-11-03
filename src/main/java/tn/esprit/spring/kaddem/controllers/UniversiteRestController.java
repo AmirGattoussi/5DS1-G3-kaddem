@@ -49,7 +49,7 @@ public class UniversiteRestController {
 
 	// http://localhost:8089/Kaddem/universite/update-universite
 	@PutMapping("/update-universite")
-	public Universite updateUniversite(@RequestBody UpdateUniversiteDTO universiteDTO) {
+	public Universite updateUniversite(@RequestBody UniversiteDTO universiteDTO) {
 		// Fetch the existing university
 		Universite universite = universiteService.retrieveUniversite(universiteDTO.getIdUniv());
 
