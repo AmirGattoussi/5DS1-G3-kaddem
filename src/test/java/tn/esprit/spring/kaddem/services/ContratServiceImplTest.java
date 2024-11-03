@@ -13,6 +13,8 @@ import tn.esprit.spring.kaddem.repositories.ContratRepository;
 import tn.esprit.spring.kaddem.repositories.EtudiantRepository;
 import tn.esprit.spring.kaddem.services.ContratServiceImpl;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -116,18 +118,36 @@ class ContratServiceImplTest {
     }
 
     @Test
-    void testGetChiffreAffaireEntreDeuxDates() {
-        Date startDate = new Date();
-        Date endDate = new Date();
-        Contrat contratIA = new Contrat(new Date(), new Date(), Specialite.IA, false, 1000);
-        Contrat contratCloud = new Contrat(new Date(), new Date(), Specialite.CLOUD, false, 1000);
+    public void testGetChiffreAffaireEntreDeuxDates() throws ParseException {
+        // Arrange
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
-        List<Contrat> contrats = List.of(contratIA, contratCloud);
-        when(contratRepository.findAll()).thenReturn(contrats);
+        Date startDate = dateFormat.parse("2024-01-01");
+        Date endDate = dateFormat.parse("2024-03-31");
+        List<Contrat> mockContrats = new ArrayList<>();
 
+        // Create mock contracts with different specialties
+        Contrat contrat1 = new Contrat(/* parameters */);
+        contrat1.setSpecialite(Specialite.IA);
+
+        Contrat contrat2 = new Contrat(/* parameters */);
+        contrat2.setSpecialite(Specialite.CLOUD);
+
+        // Add contracts to the list
+        mockContrats.add(contrat1);
+        mockContrats.add(contrat2);
+
+        // Mock the repository behavior
+        when(contratRepository.findAll()).thenReturn(mockContrats);
+
+        // Act
         float result = contratService.getChiffreAffaireEntreDeuxDates(startDate, endDate);
-        assertTrue(result > 0);
-        verify(contratRepository, times(1)).findAll();
+
+        // Assert
+        float expectedChiffreAffaire = 2100.0f; 
+        assertEquals(expectedChiffreAffaire, result, 0.01);
     }
+
+
 }
 
