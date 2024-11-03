@@ -10,6 +10,7 @@ E:\5DS1-G3-kaddem\src\main\java\tn\esprit\spring\kaddem\entities\Etudiant.java
 E:\5DS1-G3-kaddem\src\main\java\tn\esprit\spring\kaddem\repositories\EquipeRepository.java
 E:\5DS1-G3-kaddem\src\main\java\tn\esprit\spring\kaddem\entities\Specialite.java
 E:\5DS1-G3-kaddem\src\main\java\tn\esprit\spring\kaddem\services\ContratServiceImpl.java
+E:\5DS1-G3-kaddem\src\main\java\tn\esprit\spring\kaddem\dto\EtudiantDTO.java
 E:\5DS1-G3-kaddem\src\main\java\tn\esprit\spring\kaddem\repositories\ContratRepository.java
 E:\5DS1-G3-kaddem\src\main\java\tn\esprit\spring\kaddem\services\IUniversiteService.java
 E:\5DS1-G3-kaddem\src\main\java\tn\esprit\spring\kaddem\entities\DetailEquipe.java
