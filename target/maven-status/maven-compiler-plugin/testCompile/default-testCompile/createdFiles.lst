@@ -1,1 +1,3 @@
-UniversiteServiceImplTest.class
+tn\esprit\spring\kaddem\controllers\DepartementRestControllerTest.class
+tn\esprit\spring\kaddem\dto\DepartementDTOTest.class
+tn\esprit\spring\kaddem\services\DepartementServiceImplTest.class
