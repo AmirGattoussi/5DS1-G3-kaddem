@@ -21,21 +21,21 @@ public class Universite implements Serializable{
     private String nomUniv;
     @OneToMany(cascade = CascadeType.ALL)
     @JsonIgnore
-    private Set<Departement> departements;
+    private Set<Departement> departements = new HashSet<>(); // Initialize here
     public Universite() {
-
-        this.departements = new HashSet<>(); // Initialize the set to avoid NullPointerException
     }
 
     public Universite(String nomUniv) {
         super();
         this.nomUniv = nomUniv;
+        this.departements = new HashSet<>(); // Initialize to avoid NullPointerException
     }
 
     public Universite(Integer idUniv, String nomUniv) {
         super();
         this.idUniv = idUniv;
         this.nomUniv = nomUniv;
+        this.departements = new HashSet<>(); // Initialize to avoid NullPointerException
     }
 
 }

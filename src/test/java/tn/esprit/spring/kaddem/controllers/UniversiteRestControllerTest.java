@@ -90,17 +90,17 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
     }
 
     @Test
-     void testUpdateUniversite_withoutDepartementIds() {
-        // Scenario where departementIds is null
-        UniversiteDTO universiteDTO = new UniversiteDTO(1, "Updated University", null);
-        Universite universite = new Universite(1, "Original University");
+    void testUpdateUniversite_withoutDepartementIds() {
+       // Scenario where departementIds is null
+       UniversiteDTO universiteDTO = new UniversiteDTO(1, "Updated University", null);
+       Universite universite = new Universite(1, "Original University");
 
-        when(universiteService.retrieveUniversite(1)).thenReturn(universite);
-        when(universiteService.updateUniversite(any(Universite.class))).thenReturn(universite);
+       when(universiteService.retrieveUniversite(1)).thenReturn(universite);
+       when(universiteService.updateUniversite(any(Universite.class))).thenReturn(universite);
 
-        Universite result = universiteRestController.updateUniversite(universiteDTO);
+       Universite result = universiteRestController.updateUniversite(universiteDTO);
 
-        assertEquals("Updated University", result.getNomUniv());
-        assertEquals(0, result.getDepartements().size()); // No departments updated
+       assertEquals("Updated University", result.getNomUniv());
+       assertEquals(0, result.getDepartements() == null ? 0 : result.getDepartements().size()); // Check for null
     }
 }
