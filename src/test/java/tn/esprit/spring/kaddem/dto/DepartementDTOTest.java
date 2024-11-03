@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 
+
 class DepartementDTOTest {
 
     @Test
@@ -36,6 +37,12 @@ class DepartementDTOTest {
         // Assert
         assertEquals(id, departementDTO.getIdDepart());
         assertEquals(name, departementDTO.getNomDepart());
+
+        // Re-check by changing the fields again
+        departementDTO.setIdDepart(3);
+        departementDTO.setNomDepart("Physics");
+        assertEquals(3, departementDTO.getIdDepart());
+        assertEquals("Physics", departementDTO.getNomDepart());
     }
 
     @Test
@@ -60,6 +67,10 @@ class DepartementDTOTest {
         assertNotEquals(dept1, dept3); // Should not be equal
         assertEquals(dept1.hashCode(), dept2.hashCode()); // Hash codes should match for equal objects
         assertNotEquals(dept1.hashCode(), dept3.hashCode()); // Hash codes should differ for different objects
+
+        // Additional cases
+        assertNotEquals(null, dept1); // Should not be equal to null
+        assertNotEquals(new Object(), dept1); // Should not be equal to an object of another type
     }
 
     @Test
