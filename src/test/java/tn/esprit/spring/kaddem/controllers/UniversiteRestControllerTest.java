@@ -87,7 +87,6 @@ class UniversiteRestControllerTest {
 
       Departement dep1 = new Departement(1, "Department 1");
       Departement dep2 = new Departement(2, "Department 2");
-      new HashSet<>(Arrays.asList(dep1, dep2));
 
       when(universiteService.retrieveUniversite(1)).thenReturn(existingUniversite);
       when(departementRepository.findById(1)).thenReturn(Optional.of(dep1));
@@ -98,6 +97,48 @@ class UniversiteRestControllerTest {
 
       assertEquals("Updated University", result.getNomUniv());
       assertEquals(2, result.getDepartements().size());
+      verify(universiteService, times(1)).updateUniversite(any(Universite.class));
+   }
+
+   @Test
+   void testUpdateUniversite_WithNullNomUniv() {
+      UniversiteDTO universiteDTO = new UniversiteDTO(1, null, new HashSet<>(Arrays.asList(1, 2)));
+      Universite existingUniversite = new Universite(1, "Old University");
+
+      Departement dep1 = new Departement(1, "Department 1");
+      Departement dep2 = new Departement(2, "Department 2");
+
+      when(universiteService.retrieveUniversite(1)).thenReturn(existingUniversite);
+      when(departementRepository.findById(1)).thenReturn(Optional.of(dep1));
+      when(departementRepository.findById(2)).thenReturn(Optional.of(dep2));
+      when(universiteService.updateUniversite(any(Universite.class))).thenReturn(existingUniversite);
+
+      Universite result = universiteRestController.updateUniversite(universiteDTO);
+
+      // Check that the university name has not changed
+      assertEquals("Old University", result.getNomUniv());
+      assertEquals(2, result.getDepartements().size());
+      verify(universiteService, times(1)).updateUniversite(any(Universite.class));
+   }
+
+   @Test
+   void testUpdateUniversite_WithInvalidDepartementIds() {
+      UniversiteDTO universiteDTO = new UniversiteDTO(1, "Updated University", new HashSet<>(Arrays.asList(1, 999))); // 999 does not exist
+      Universite existingUniversite = new Universite(1, "Old University");
+
+      Departement dep1 = new Departement(1, "Department 1");
+
+      when(universiteService.retrieveUniversite(1)).thenReturn(existingUniversite);
+      when(departementRepository.findById(1)).thenReturn(Optional.of(dep1));
+      when(departementRepository.findById(999)).thenReturn(Optional.empty()); // Simulate non-existent department
+      when(universiteService.updateUniversite(any(Universite.class))).thenReturn(existingUniversite);
+
+      Universite result = universiteRestController.updateUniversite(universiteDTO);
+
+      // Check that the university name is updated
+      assertEquals("Updated University", result.getNomUniv());
+      // Only one valid department should be associated
+      assertEquals(1, result.getDepartements().size());
       verify(universiteService, times(1)).updateUniversite(any(Universite.class));
    }
 
