@@ -9,25 +9,14 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>tn.esprit.spring</groupId>
-    <artifactId>kaddem</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
-    <name>kaddem</name>
+    <artifactId>5ds1-g3-kaddem</artifactId>
+    <version>0.1.5-SNAPSHOT</version>
+    <name>5ds1-g3-kaddem</name>
     <description>kaddem</description>
     <properties>
         <java.version>1.8</java.version>
     </properties>
     <dependencies>
-        <!-- Log4j 2 Core and API dependencies -->
-        <dependency>
-            <groupId>org.apache.logging.log4j</groupId>
-            <artifactId>log4j-api</artifactId>
-            <version>2.19.0</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.logging.log4j</groupId>
-            <artifactId>log4j-core</artifactId>
-            <version>2.19.0</version>
-        </dependency>
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -90,6 +79,16 @@
             <artifactId>junit-jupiter-api</artifactId>
         </dependency>
         <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-core</artifactId>
+            <version>2.19.0</version> <!-- Use the latest version -->
+        </dependency>
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-api</artifactId>
+            <version>2.19.0</version> <!-- Use the latest version -->
+        </dependency>
+        <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-junit-jupiter</artifactId>
         </dependency>
@@ -101,6 +100,11 @@
     </dependencies>
 
     <build>
+        <testResources>
+            <testResource>
+                <directory>src/test/resources</directory>
+            </testResource>
+        </testResources>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
