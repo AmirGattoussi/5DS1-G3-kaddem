@@ -4,6 +4,7 @@ services:
   mysqldb:
     image: mysql:8.0
     container_name: mysqldb
+    restart: always
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: kaddem
@@ -17,6 +18,7 @@ services:
   springapp:
     image: meherbs123/meherbensalem-5ds1-g3-kaddem
     container_name: springapp
+    restart: always
     depends_on:
       - mysqldb
     ports:
