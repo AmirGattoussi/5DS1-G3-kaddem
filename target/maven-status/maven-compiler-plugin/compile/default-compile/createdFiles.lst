@@ -29,4 +29,3 @@ tn\esprit\spring\kaddem\services\IUniversiteService.class
 tn\esprit\spring\kaddem\services\IEtudiantService.class
 tn\esprit\spring\kaddem\services\ContratServiceImpl.class
 tn\esprit\spring\kaddem\services\EtudiantServiceImpl.class
-tn\esprit\spring\kaddem\dto\UpdateUniversiteDTO.class

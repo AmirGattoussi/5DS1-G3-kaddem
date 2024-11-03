@@ -9,6 +9,8 @@ import tn.esprit.spring.kaddem.entities.Departement;
 import tn.esprit.spring.kaddem.entities.Universite;
 import tn.esprit.spring.kaddem.repositories.DepartementRepository;
 import tn.esprit.spring.kaddem.repositories.UniversiteRepository;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.*;
 
@@ -16,6 +18,8 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 class UniversiteServiceImplTest {
+    private static final Logger logger = LogManager.getLogger(UniversiteServiceImplTest.class);
+
 
     @Mock
     private UniversiteRepository universiteRepository;
@@ -29,10 +33,14 @@ class UniversiteServiceImplTest {
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
+        logger.info("Setting up test environment.");
+
     }
 
     @Test
     void testRetrieveAllUniversites() {
+        logger.info("Running testRetrieveAllUniversites");
+
         Universite uni1 = new Universite(1, "ESPRIT");
         Universite uni2 = new Universite(2, "ENIT");
         List<Universite> universites = Arrays.asList(uni1, uni2);
@@ -40,6 +48,8 @@ class UniversiteServiceImplTest {
         when(universiteRepository.findAll()).thenReturn(universites);
 
         List<Universite> result = universiteService.retrieveAllUniversites();
+        logger.info("Retrieved all universities: {}", result.size());
+
 
         assertEquals(2, result.size());
         verify(universiteRepository, times(1)).findAll();
@@ -47,6 +57,8 @@ class UniversiteServiceImplTest {
 
     @Test
     void testAddUniversite() {
+        logger.info("Running testAddUniversite");
+
         Universite uni = new Universite("Sup'Com");
 
         when(universiteRepository.save(uni)).thenReturn(uni);
@@ -55,10 +67,14 @@ class UniversiteServiceImplTest {
 
         assertEquals("Sup'Com", result.getNomUniv());
         verify(universiteRepository, times(1)).save(uni);
+        logger.info("Added university: {}", uni.getNomUniv());
+
     }
 
     @Test
     void testUpdateUniversite() {
+        logger.info("Running testUpdateUniversite");
+
         Universite uni = new Universite(1, "ENIT");
 
         when(universiteRepository.save(uni)).thenReturn(uni);
@@ -67,10 +83,13 @@ class UniversiteServiceImplTest {
 
         assertEquals("ENIT", result.getNomUniv());
         verify(universiteRepository, times(1)).save(uni);
+        logger.info("Updated university: {}", uni.getNomUniv());
+
     }
 
     @Test
     void testRetrieveUniversiteWithNonExistentId() {
+        logger.info("Running testRetrieveUniversiteWithNonExistentId");
         Integer id = 1;
 
         when(universiteRepository.findById(id)).thenReturn(Optional.empty());
@@ -83,6 +102,7 @@ class UniversiteServiceImplTest {
 
     @Test
     void testDeleteUniversiteWithNonExistentId() {
+        logger.info("Running testDeleteUniversiteWithNonExistentId");
         Integer id = 1;
 
         when(universiteRepository.findById(id)).thenReturn(Optional.empty());

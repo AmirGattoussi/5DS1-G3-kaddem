@@ -1,1 +1,4 @@
+EtudiantServiceImplMockitoTest.class
+tn\esprit\spring\kaddem\dto\UniversiteDTOTest.class
 tn\esprit\spring\kaddem\services\UniversiteServiceImplTest.class
+tn\esprit\spring\kaddem\controllers\UniversiteRestControllerTest.class
