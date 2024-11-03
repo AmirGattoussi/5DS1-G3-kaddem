@@ -41,12 +41,15 @@ return  (universiteRepository.save(u));
         universiteRepository.delete(retrieveUniversite(idUniversite));
     }
 
-    public void assignUniversiteToDepartement(Integer idUniversite, Integer idDepartement){
+    public void assignUniversiteToDepartement(Integer idUniversite, Integer idDepartement) {
         Universite u = universiteRepository.findById(idUniversite).orElse(null);
-        Departement d = departementRepository.findById(idDepartement).orElse(null);
+        if (u == null) {
+            throw new IllegalArgumentException("Invalid Universite ID: " + idUniversite);
+        }
 
-        if (u == null || d == null) {
-            throw new IllegalArgumentException("Invalid Universite or Departement ID");
+        Departement d = departementRepository.findById(idDepartement).orElse(null);
+        if (d == null) {
+            throw new IllegalArgumentException("Invalid Departement ID: " + idDepartement);
         }
 
         u.getDepartements().add(d);

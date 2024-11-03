@@ -98,15 +98,16 @@ class UniversiteServiceImplTest {
         Integer uniId = 1;
         Integer deptId = 1;
 
+        // Only mock the university repository to return empty
         when(universiteRepository.findById(uniId)).thenReturn(Optional.empty());
 
         Exception exception = assertThrows(IllegalArgumentException.class, () -> {
             universiteService.assignUniversiteToDepartement(uniId, deptId);
         });
 
-        assertEquals("Invalid Universite or Departement ID", exception.getMessage());
+        assertEquals("Invalid Universite ID: " + uniId, exception.getMessage());
         verify(universiteRepository, times(1)).findById(uniId);
-        verify(departementRepository, never()).findById(deptId);
+        verify(departementRepository, never()).findById(deptId); // Verify departementRepository is never called
     }
 
     @Test
