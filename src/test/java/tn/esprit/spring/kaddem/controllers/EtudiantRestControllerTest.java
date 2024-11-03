@@ -106,4 +106,29 @@ class EtudiantRestControllerTest {
         assertEquals(Option.valueOf(etudiantDTO.getOp()), etudiant.getOp());
     }
 
+    @Test
+    void testAddEtudiant() throws Exception {
+        // Given
+        EtudiantDTO etudiantDTO = new EtudiantDTO();
+        etudiantDTO.setIdEtudiant(1);
+        etudiantDTO.setNomE("John");
+        etudiantDTO.setPrenomE("Doe");
+        etudiantDTO.setOp("SE");
+
+        Etudiant etudiant = new Etudiant(1, "John", "Doe", Option.SE);
+
+        when(etudiantService.addEtudiant(any(Etudiant.class))).thenReturn(etudiant);
+
+        mockMvc.perform(post("/etudiant/add-etudiant")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"idEtudiant\": 1, \"nomE\": \"John\", \"prenomE\": \"Doe\", \"op\": \"SE\"}"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.idEtudiant").value(etudiant.getIdEtudiant()))
+                .andExpect(jsonPath("$.nomE").value(etudiant.getNomE()))
+                .andExpect(jsonPath("$.prenomE").value(etudiant.getPrenomE()))
+                .andExpect(jsonPath("$.op").value(etudiant.getOp().toString()));
+
+        verify(etudiantService, times(1)).addEtudiant(any(Etudiant.class));
+    }
+
 }

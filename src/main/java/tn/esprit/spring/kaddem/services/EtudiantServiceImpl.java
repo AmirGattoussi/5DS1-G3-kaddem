@@ -58,13 +58,7 @@ public class EtudiantServiceImpl implements IEtudiantService {
 
 	public Etudiant retrieveEtudiant(Integer idEtudiant) {
 		log.info("Retrieving student with ID: {}", idEtudiant);
-		Etudiant etudiant = etudiantRepository.findById(idEtudiant).orElse(null);
-		if (etudiant == null) {
-			log.warn("Student with ID {} not found", idEtudiant);
-		} else {
-			log.debug("Retrieved student: {}", etudiant);
-		}
-		return etudiant;
+		return etudiantRepository.findById(idEtudiant).orElse(null);
 	}
 
 	public void removeEtudiant(Integer idEtudiant) {
@@ -73,8 +67,6 @@ public class EtudiantServiceImpl implements IEtudiantService {
 		if (e != null) {
 			etudiantRepository.delete(e);
 			log.debug("Removed student with ID {}", idEtudiant);
-		} else {
-			log.warn("Student with ID {} not found, could not remove", idEtudiant);
 		}
 	}
 
@@ -87,8 +79,6 @@ public class EtudiantServiceImpl implements IEtudiantService {
 			etudiant.setDepartement(departement);
 			etudiantRepository.save(etudiant);
 			log.debug("Assigned student with ID {} to department {}", etudiantId, departementId);
-		} else {
-			log.warn("Failed to assign student to department: student or department not found");
 		}
 	}
 
