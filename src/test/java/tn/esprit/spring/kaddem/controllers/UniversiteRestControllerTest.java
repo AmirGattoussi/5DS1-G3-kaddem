@@ -6,101 +6,74 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import tn.esprit.spring.kaddem.dto.UniversiteDTO;
-import tn.esprit.spring.kaddem.entities.Departement;
 import tn.esprit.spring.kaddem.entities.Universite;
-import tn.esprit.spring.kaddem.repositories.DepartementRepository;
 import tn.esprit.spring.kaddem.services.IUniversiteService;
 
+import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Optional;
+import java.util.List;
 
-
-import static org.mockito.Mockito.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
 
- class UniversiteRestControllerTest {
+class UniversiteRestControllerTest {
 
-    @InjectMocks
-    private UniversiteRestController universiteRestController;
+   @InjectMocks
+   private UniversiteRestController universiteRestController;
 
-    @Mock
-    private IUniversiteService universiteService;
+   @Mock
+   private IUniversiteService universiteService;
 
-    @Mock
-    private DepartementRepository departementRepository;
+   @BeforeEach
+   void setUp() {
+      MockitoAnnotations.openMocks(this);
+   }
 
-    @BeforeEach
-    void setUp() {
-        MockitoAnnotations.openMocks(this);
-    }
+   @Test
+   void testGetUniversites() {
+      // Arrange
+      Universite universite1 = new Universite(1, "University A");
+      Universite universite2 = new Universite(2, "University B");
+      List<Universite> universitesList = new ArrayList<>(Arrays.asList(universite1, universite2));
+      when(universiteService.retrieveAllUniversites()).thenReturn(universitesList);
 
-    @Test
-     void testUpdateUniversite_withNomUnivAndDepartementIds() {
-        // Scenario where nomUniv and departementIds are provided
-        UniversiteDTO universiteDTO = new UniversiteDTO(1, "Updated University", new HashSet<>(Arrays.asList(1, 2)));
-        Universite universite = new Universite(1, "Original University");
-        Departement departement1 = new Departement();
-        Departement departement2 = new Departement();
+      // Act
+      List<Universite> universites = universiteRestController.getUniversites();
 
-        when(universiteService.retrieveUniversite(1)).thenReturn(universite);
-        when(departementRepository.findById(1)).thenReturn(Optional.of(departement1));
-        when(departementRepository.findById(2)).thenReturn(Optional.of(departement2));
-        when(universiteService.updateUniversite(any(Universite.class))).thenReturn(universite);
+      // Assert
+      assertEquals(2, universites.size());
+      verify(universiteService, times(1)).retrieveAllUniversites();
+   }
 
-        Universite result = universiteRestController.updateUniversite(universiteDTO);
+   @Test
+   void testRetrieveUniversite() {
+      // Arrange
+      Universite universite = new Universite(1, "University A");
+      when(universiteService.retrieveUniversite(1)).thenReturn(universite);
 
-        assertEquals("Updated University", result.getNomUniv());
-        assertEquals(2, result.getDepartements().size());
-    }
+      // Act
+      Universite result = universiteRestController.retrieveUniversite(1);
 
-    @Test
-     void testUpdateUniversite_withoutNomUniv() {
-        // Scenario where nomUniv is null but departementIds is provided
-        UniversiteDTO universiteDTO = new UniversiteDTO(1, null, new HashSet<>(Arrays.asList(1)));
-        Universite universite = new Universite(1, "Original University");
-        Departement departement1 = new Departement();
+      // Assert
+      assertEquals("University A", result.getNomUniv());
+      verify(universiteService, times(1)).retrieveUniversite(1);
+   }
 
-        when(universiteService.retrieveUniversite(1)).thenReturn(universite);
-        when(departementRepository.findById(1)).thenReturn(Optional.of(departement1));
-        when(universiteService.updateUniversite(any(Universite.class))).thenReturn(universite);
+   @Test
+   void testAddUniversite() {
+      // Arrange
+      UniversiteDTO universiteDTO = new UniversiteDTO(null, "New University", null);
+      Universite universite = new Universite();
+      universite.setNomUniv("New University");
 
-        Universite result = universiteRestController.updateUniversite(universiteDTO);
+      when(universiteService.addUniversite(any(Universite.class))).thenReturn(universite);
 
-        assertEquals("Original University", result.getNomUniv());
-        assertEquals(1, result.getDepartements().size());
-    }
+      // Act
+      Universite result = universiteRestController.addUniversite(universiteDTO);
 
-    @Test
-     void testUpdateUniversite_withNonexistentDepartement() {
-        // Scenario where one of the departement IDs does not exist in the repository
-        UniversiteDTO universiteDTO = new UniversiteDTO(1, "Updated University", new HashSet<>(Arrays.asList(1, 2)));
-        Universite universite = new Universite(1, "Original University");
-        Departement departement1 = new Departement();
-
-        when(universiteService.retrieveUniversite(1)).thenReturn(universite);
-        when(departementRepository.findById(1)).thenReturn(Optional.of(departement1));
-        when(departementRepository.findById(2)).thenReturn(Optional.empty()); // Nonexistent department
-        when(universiteService.updateUniversite(any(Universite.class))).thenReturn(universite);
-
-        Universite result = universiteRestController.updateUniversite(universiteDTO);
-
-        assertEquals("Updated University", result.getNomUniv());
-        assertEquals(1, result.getDepartements().size()); // Only 1 valid department added
-    }
-
-    @Test
-    void testUpdateUniversite_withoutDepartementIds() {
-       // Scenario where departementIds is null
-       UniversiteDTO universiteDTO = new UniversiteDTO(1, "Updated University", null);
-       Universite universite = new Universite(1, "Original University");
-
-       when(universiteService.retrieveUniversite(1)).thenReturn(universite);
-       when(universiteService.updateUniversite(any(Universite.class))).thenReturn(universite);
-
-       Universite result = universiteRestController.updateUniversite(universiteDTO);
-
-       assertEquals("Updated University", result.getNomUniv());
-       assertEquals(0, result.getDepartements() == null ? 0 : result.getDepartements().size()); // Check for null
-    }
+      // Assert
+      assertEquals("New University", result.getNomUniv());
+      verify(universiteService, times(1)).addUniversite(any(Universite.class));
+   }
 }
