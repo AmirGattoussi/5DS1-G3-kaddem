@@ -19,6 +19,8 @@ public class DetailEquipe implements Serializable{
 
     private String thematique;
 
+    @Getter
+    @Setter
     @OneToOne(mappedBy="detailEquipe")
     private Equipe equipe;
 

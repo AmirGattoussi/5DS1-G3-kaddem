@@ -20,7 +20,9 @@ public class Equipe implements Serializable{
 
     @JsonIgnore
     private Set<Etudiant> etudiants;
+
     @OneToOne
+    @JoinColumn(name = "id_detail_equipe")
     private DetailEquipe detailEquipe;
 
     public Equipe() {
