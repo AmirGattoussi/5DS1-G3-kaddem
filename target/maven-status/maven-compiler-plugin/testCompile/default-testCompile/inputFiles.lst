@@ -1,1 +1,8 @@
+<<<<<<< Updated upstream
 C:\Users\gtsia\Documents\GitHub\Kaddem\src\test\java\UniversiteServiceImplTest.java
+=======
+/Users/neil/Documents/neil work/ESPRIT/DevOps/Project/Ubuntu/5DS1-G3-kaddem/src/test/java/tn/esprit/spring/kaddem/dto/UniversiteDTOTest.java
+/Users/neil/Documents/neil work/ESPRIT/DevOps/Project/Ubuntu/5DS1-G3-kaddem/src/test/java/EtudiantServiceImplMockitoTest.java
+/Users/neil/Documents/neil work/ESPRIT/DevOps/Project/Ubuntu/5DS1-G3-kaddem/src/test/java/tn/esprit/spring/kaddem/controllers/UniversiteRestControllerTest.java
+/Users/neil/Documents/neil work/ESPRIT/DevOps/Project/Ubuntu/5DS1-G3-kaddem/src/test/java/tn/esprit/spring/kaddem/services/UniversiteServiceImplTest.java
+>>>>>>> Stashed changes
