@@ -2,12 +2,12 @@ version: '3.8'
 
 services:
   mysqldb:
-    image: mysql:8.0   # or another version of MySQL if needed
+    image: mysql:8.0
     container_name: mysqldb
     environment:
-      MYSQL_ROOT_PASSWORD: root  # Same as in your application.properties
-      MYSQL_DATABASE: kaddem     # The database name in your connection string
-      MYSQL_ROOT_HOST: "%"  # Allow root access from any host (useful in Docker networking)
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: kaddem
+      MYSQL_ROOT_HOST: "%"
 
     ports:
       - "3306:3306"
@@ -15,7 +15,7 @@ services:
       - mysqldb_data:/var/lib/mysql
 
   springapp:
-    image: amirgattoussi/amirgattoussilahouel_5ds1_g3_kaddem
+    image: meherbs123/spring-backend:latest
     container_name: springapp
     depends_on:
       - mysqldb
