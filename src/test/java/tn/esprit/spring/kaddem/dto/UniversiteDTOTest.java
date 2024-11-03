@@ -8,10 +8,10 @@ import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class UniversiteDTOTest {
+class UniversiteDTOTest {
 
     @Test
-    public void testUniversiteDTO() {
+    void testUniversiteDTO() {
         // Create UniversiteDTO instance
         UniversiteDTO universiteDTO = new UniversiteDTO("Test University");
 
@@ -32,7 +32,7 @@ public class UniversiteDTOTest {
     }
 
     @Test
-    public void testUpdateUniversiteDTO() {
+    void testUpdateUniversiteDTO() {
         // Create a set of department IDs
         Set<Integer> departmentIds = new HashSet<>();
         departmentIds.add(1);

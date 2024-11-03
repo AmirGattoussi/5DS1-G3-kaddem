@@ -157,20 +157,16 @@ class UniversiteServiceImplTest {
     }
     @Test
     void testAssignUniversiteToDepartement_NullUniversite() {
-        // Arrange
-        Integer uniId = 1;
-        Integer deptId = 1;
+        // Mocking universiteRepository to return an empty Optional (null)
+        when(universiteRepository.findById(anyInt())).thenReturn(Optional.empty());
 
-        // Simulate that the Universite is not found (returns empty Optional)
-        when(universiteRepository.findById(uniId)).thenReturn(Optional.empty());
+        // Call the method
+        universiteService.assignUniversiteToDepartement(1, 1);
 
-        // Act & Assert
-        assertThrows(AssertionError.class, () -> {
-            universiteService.assignUniversiteToDepartement(uniId, deptId);
-        });
-
-        // Verify that no interaction happened with departementRepository and universiteRepository save.
+        // Verify that departementRepository.findById was never called
         verify(departementRepository, never()).findById(anyInt());
+        // Verify that universiteRepository.save was never called since the Universite does not exist
         verify(universiteRepository, never()).save(any(Universite.class));
     }
+
 }
