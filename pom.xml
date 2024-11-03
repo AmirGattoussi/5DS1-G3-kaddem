@@ -80,6 +80,7 @@
     </dependencies>
 
     <build>
+        <finalName>5DS1-G3-kaddem</finalName>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
@@ -113,6 +114,7 @@
                 </executions>
             </plugin>
         </plugins>
+
     </build>
     <distributionManagement>
         <repository>
