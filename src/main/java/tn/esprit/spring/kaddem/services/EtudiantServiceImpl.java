@@ -21,17 +21,19 @@ import java.util.List;
 @Slf4j
 public class EtudiantServiceImpl implements IEtudiantService {
 
-	@Autowired
-	EtudiantRepository etudiantRepository;
-
-	@Autowired
-	ContratRepository contratRepository;
-
-	@Autowired
-	EquipeRepository equipeRepository;
-
-	@Autowired
-	DepartementRepository departementRepository;
+	private final EtudiantRepository etudiantRepository;
+	private final ContratRepository contratRepository;
+	private final EquipeRepository equipeRepository;
+	private final DepartementRepository departementRepository;
+	public EtudiantServiceImpl(EtudiantRepository etudiantRepository,
+							   ContratRepository contratRepository,
+							   EquipeRepository equipeRepository,
+							   DepartementRepository departementRepository) {
+		this.etudiantRepository = etudiantRepository;
+		this.contratRepository = contratRepository;
+		this.equipeRepository = equipeRepository;
+		this.departementRepository = departementRepository;
+	}
 
 	public List<Etudiant> retrieveAllEtudiants() {
 		log.info("Retrieving all students");
