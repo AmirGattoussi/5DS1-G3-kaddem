@@ -8,8 +8,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import tn.esprit.spring.kaddem.entities.Etudiant;
 import tn.esprit.spring.kaddem.repositories.EtudiantRepository;
-import tn.esprit.spring.kaddem.services.EtudiantServiceImpl;
-
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
