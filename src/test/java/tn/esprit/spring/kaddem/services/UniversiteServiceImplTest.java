@@ -140,4 +140,47 @@ class UniversiteServiceImplTest {
         assertTrue(result.contains(dept2));
         verify(universiteRepository, times(1)).findById(uniId);
     }
+    @Test
+    void testAssignUniversiteToDepartementWithNonExistentDepartement() {
+        Integer uniId = 1;
+        Integer deptId = 1;
+        Universite uni = new Universite(uniId, "ENIT");
+
+        // Mocking the Universite exists but the Departement does not
+        when(universiteRepository.findById(uniId)).thenReturn(Optional.of(uni));
+        when(departementRepository.findById(deptId)).thenReturn(Optional.empty());
+
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            universiteService.assignUniversiteToDepartement(uniId, deptId);
+        });
+
+        assertEquals("Invalid Departement ID: " + deptId, exception.getMessage());
+        verify(universiteRepository, times(1)).findById(uniId);
+        verify(departementRepository, times(1)).findById(deptId);
+        verify(universiteRepository, never()).save(uni); // Ensures save is never called
+    }
+    @Test
+    void testAssignUniversiteToDepartementSuccessfully() {
+        Integer uniId = 1;
+        Integer deptId = 1;
+        Universite uni = new Universite(uniId, "ENIT");
+        Departement dept = new Departement(deptId, "Informatique");
+        uni.setDepartements(new HashSet<>()); // Initialize departements set
+
+        // Mock both Universite and Departement exist
+        when(universiteRepository.findById(uniId)).thenReturn(Optional.of(uni));
+        when(departementRepository.findById(deptId)).thenReturn(Optional.of(dept));
+        when(universiteRepository.save(uni)).thenReturn(uni);
+
+        // Act
+        universiteService.assignUniversiteToDepartement(uniId, deptId);
+
+        // Assert
+        assertTrue(uni.getDepartements().contains(dept));
+        verify(universiteRepository, times(1)).findById(uniId);
+        verify(departementRepository, times(1)).findById(deptId);
+        verify(universiteRepository, times(1)).save(uni);
+    }
+
+
 }
