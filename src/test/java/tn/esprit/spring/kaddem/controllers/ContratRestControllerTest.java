@@ -5,7 +5,9 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import tn.esprit.spring.kaddem.dto.ContratDTO;
 import tn.esprit.spring.kaddem.entities.Contrat;
+import tn.esprit.spring.kaddem.entities.Specialite;
 import tn.esprit.spring.kaddem.services.IContratService;
 
 import java.util.Arrays;
@@ -86,16 +88,37 @@ class ContratRestControllerTest {
     @Test
     void testUpdateContrat() {
         // Arrange
-        Contrat contratToUpdate = new Contrat();
+        ContratDTO contratToUpdate = new ContratDTO();
+        contratToUpdate.setIdContrat(1); // Set necessary fields
+        contratToUpdate.setDateDebutContrat(new Date());
+        contratToUpdate.setDateFinContrat(new Date());
+        contratToUpdate.setSpecialite(Specialite.IA);
+        contratToUpdate.setArchive(false);
+        contratToUpdate.setMontantContrat(1000);
+
         Contrat expectedContrat = new Contrat();
-        when(contratService.updateContrat(contratToUpdate)).thenReturn(expectedContrat);
+        expectedContrat.setIdContrat(1); // Ensure these fields match the expected output
+        expectedContrat.setDateDebutContrat(contratToUpdate.getDateDebutContrat());
+        expectedContrat.setDateFinContrat(contratToUpdate.getDateFinContrat());
+        expectedContrat.setSpecialite(contratToUpdate.getSpecialite());
+        expectedContrat.setArchive(contratToUpdate.getArchive());
+        expectedContrat.setMontantContrat(contratToUpdate.getMontantContrat());
+
+        when(contratService.updateContrat(any(Contrat.class))).thenReturn(expectedContrat);
 
         // Act
         Contrat result = contratRestController.updateContrat(contratToUpdate);
 
         // Assert
         assertEquals(expectedContrat, result);
-        verify(contratService, times(1)).updateContrat(contratToUpdate);
+        verify(contratService, times(1)).updateContrat(argThat(contrat ->
+                contrat.getIdContrat().equals(contratToUpdate.getIdContrat()) &&
+                        contrat.getDateDebutContrat().equals(contratToUpdate.getDateDebutContrat()) &&
+                        contrat.getDateFinContrat().equals(contratToUpdate.getDateFinContrat()) &&
+                        contrat.getSpecialite().equals(contratToUpdate.getSpecialite()) &&
+                        contrat.getArchive().equals(contratToUpdate.getArchive()) &&
+                        contrat.getMontantContrat().equals(contratToUpdate.getMontantContrat())
+        ));
     }
 
     @Test

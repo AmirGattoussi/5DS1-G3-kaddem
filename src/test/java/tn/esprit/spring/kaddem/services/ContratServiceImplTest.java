@@ -19,13 +19,15 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class ContratServiceImplTest {
-
+    private static final Logger logger = LogManager.getLogger(ContratServiceImplTest.class);
     @Mock
     private ContratRepository contratRepository;
 
