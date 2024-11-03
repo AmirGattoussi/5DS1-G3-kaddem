@@ -5,11 +5,10 @@ FROM openjdk:17-jdk-alpine
 WORKDIR /app
 
 # Copy the jar file produced by the Maven build
-COPY target/kaddem-0.0.1-SNAPSHOT.jar /app/kaddem.jar
+COPY target/5DS1-G3-kaddem.jar /app/kaddem.jar
 
 # Expose the port your Spring app runs on (default is 8080)
 EXPOSE 8089
 
 # Command to run the Spring Boot application
 ENTRYPOINT ["java", "-jar", "/app/kaddem.jar"]
-
