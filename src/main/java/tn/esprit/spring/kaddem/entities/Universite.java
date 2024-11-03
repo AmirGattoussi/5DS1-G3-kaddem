@@ -1,6 +1,8 @@
 package tn.esprit.spring.kaddem.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.io.Serializable;
 import java.util.Set;
@@ -8,6 +10,8 @@ import java.util.HashSet;
 
 import javax.persistence.*;
 
+@Setter
+@Getter
 @Entity
 
 public class Universite implements Serializable{
@@ -17,42 +21,21 @@ public class Universite implements Serializable{
     private String nomUniv;
     @OneToMany(cascade = CascadeType.ALL)
     @JsonIgnore
-    private Set<Departement> departements;
+    private Set<Departement> departements = new HashSet<>(); // Initialize here
     public Universite() {
-        this.departements = new HashSet<>(); // Initialize the set to avoid NullPointerException
     }
 
     public Universite(String nomUniv) {
         super();
         this.nomUniv = nomUniv;
+        this.departements = new HashSet<>(); // Initialize to avoid NullPointerException
     }
 
     public Universite(Integer idUniv, String nomUniv) {
         super();
         this.idUniv = idUniv;
         this.nomUniv = nomUniv;
-    }
-
-    public Set<Departement> getDepartements() {
-        return departements;
-    }
-
-    public void setDepartements(Set<Departement> departements) {
-        this.departements = departements;
-    }
-
-    public Integer getIdUniv() {
-        return idUniv;
-    }
-    public void setIdUniv(Integer idUniv) {
-        this.idUniv = idUniv;
-    }
-    public String getNomUniv() {
-        return nomUniv;
-    }
-
-    public void setNomUniv(String nomUniv) {
-        this.nomUniv = nomUniv;
+        this.departements = new HashSet<>(); // Initialize to avoid NullPointerException
     }
 
 }
