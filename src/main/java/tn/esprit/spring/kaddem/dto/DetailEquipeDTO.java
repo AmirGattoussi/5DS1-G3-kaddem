@@ -1,13 +1,13 @@
 package tn.esprit.spring.kaddem.dto;
 
-import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import tn.esprit.spring.kaddem.entities.Equipe;
 
 @Data
 @Getter
 @Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class DetailEquipeDTO {
     private Integer idDetailEquipe;
     private Integer salle;

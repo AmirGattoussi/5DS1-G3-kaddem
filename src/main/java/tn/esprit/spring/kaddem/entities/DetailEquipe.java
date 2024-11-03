@@ -40,4 +40,10 @@ public class DetailEquipe implements Serializable{
         this.thematique = thematique;
     }
 
+    public DetailEquipe(Integer idDetailEquipe, Integer salle, String thematique, Equipe equipe) {
+        this.idDetailEquipe = idDetailEquipe;
+        this.salle = salle;
+        this.thematique = thematique;
+        this.equipe = equipe;
+    }
 }
