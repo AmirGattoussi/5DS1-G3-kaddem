@@ -2,6 +2,7 @@
 
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+import tn.esprit.spring.kaddem.dto.DetailEquipeDTO;
 import tn.esprit.spring.kaddem.entities.DetailEquipe;
 import tn.esprit.spring.kaddem.services.IDetailEquipeService;
 
@@ -13,39 +14,45 @@ import java.util.List;
 public class DetailEquipeRestController {
     IDetailEquipeService detailEquipeService;
 
+    // http://localhost:8089/kaddem/detailEquipe/retrieve-all-detailEquipes
     @GetMapping(&quot;/retrieve-all-detailEquipes&quot;)
     public List&lt;DetailEquipe&gt; getDetailEquipes() {
-<span class="nc" id="L18">        return detailEquipeService.retrieveAllDetailEquipes();</span>
+<span class="fc" id="L20">        return detailEquipeService.retrieveAllDetailEquipes();</span>
     }
-    // http://localhost:8089/Kaddem/detailEquipe/retrieve-detailEquipe/1
+    // http://localhost:8089/kaddem/detailEquipe/retrieve-detailEquipe/1
     @GetMapping(&quot;/retrieve-detailEquipe/{detailEquipe-id}&quot;)
     public DetailEquipe retrieveDetailEquipe(@PathVariable(&quot;detailEquipe-id&quot;) Integer detailEquipeId) {
-<span class="nc" id="L23">        return detailEquipeService.retrieveDetailEquipe(detailEquipeId);</span>
+<span class="fc" id="L25">        return detailEquipeService.retrieveDetailEquipe(detailEquipeId);</span>
     }
 
-    // http://localhost:8089/Kaddem/detailEquipe/add-detailEquipe
-    @PostMapping(&quot;/add-detailEquipe&quot;)
-    public DetailEquipe addDetailEquipe(@RequestBody DetailEquipe de) {
-<span class="nc" id="L29">        return detailEquipeService.addDetailEquipe(de);</span>
-    }
-
-    // http://localhost:8089/Kaddem/detailEquipe/remove-detailEquipe/1
+    // http://localhost:8089/kaddem/detailEquipe/remove-detailEquipe/1
     @DeleteMapping(&quot;/remove-detailEquipe/{detailEquipe-id}&quot;)
     public void removeDetailEquipe(@PathVariable(&quot;detailEquipe-id&quot;) Integer detailEquipeId) {
-<span class="nc" id="L35">        detailEquipeService.deleteDetailEquipe(detailEquipeId);</span>
-<span class="nc" id="L36">    }</span>
+<span class="fc" id="L31">        detailEquipeService.deleteDetailEquipe(detailEquipeId);</span>
+<span class="fc" id="L32">    }</span>
 
-    // http://localhost:8089/Kaddem/detailEquipe/update-detailEquipe
-    @PutMapping(&quot;/update-detailEquipe&quot;)
-    public DetailEquipe updateDetailEquipe(@RequestBody DetailEquipe de) {
-<span class="nc" id="L41">        return detailEquipeService.updateDetailEquipe(de);</span>
+    // http://localhost:8089/kaddem/detailEquipe/update-detailEquipe/8
+    @PutMapping(&quot;/update-detailEquipe/{detailEquipe-id}&quot;)
+    public DetailEquipe updateDetailEquipe(@RequestBody DetailEquipeDTO detailEquipeDTO, @PathVariable(&quot;detailEquipe-id&quot;) Integer idDetailEquipe) {
+<span class="fc" id="L37">        DetailEquipe detailEquipe = convertToEntity(detailEquipeDTO);</span>
+<span class="fc" id="L38">        return detailEquipeService.updateDetailEquipe(detailEquipe, idDetailEquipe);</span>
     }
 
-    // http://localhost:8089/Kaddem/detailEquipe/affecter-detailEquipe-Equipe/1/1
-    @PutMapping(value=&quot;/affecter-detailEquipe-Equipe/{detailEquipeId}/{equipeId}&quot;)
-    public void assignDetailEquipeToEquipe(@PathVariable(&quot;detailEquipeId&quot;) Integer detailEquipeId, @PathVariable(&quot;equipeId&quot;)Integer equipeId){
-<span class="nc" id="L47">        detailEquipeService.assignDetailEquipeToEquipe(detailEquipeId, equipeId);</span>
-<span class="nc" id="L48">    }</span>
+    // http://localhost:8089/kaddem/detailEquipe/add-assign-detailEquipe-equipe/3
+    @PostMapping(value=&quot;/add-assign-detailEquipe-equipe/{equipeId}&quot;)
+    public void addAndAssignDetailEquipeToEquipe(@RequestBody DetailEquipeDTO detailEquipeDTO, @PathVariable(&quot;equipeId&quot;)Integer equipeId){
+<span class="fc" id="L44">        DetailEquipe detailEquipe = convertToEntity(detailEquipeDTO);</span>
+<span class="fc" id="L45">        detailEquipeService.addAndAssignDetailEquipeToEquipe(detailEquipe, equipeId);</span>
+<span class="fc" id="L46">    }</span>
+
+    public DetailEquipe convertToEntity(DetailEquipeDTO detailEquipeDTO) {
+<span class="fc" id="L49">        DetailEquipe detailEquipe = new DetailEquipe();</span>
+<span class="fc" id="L50">        detailEquipe.setIdDetailEquipe(detailEquipeDTO.getIdDetailEquipe());</span>
+<span class="fc" id="L51">        detailEquipe.setSalle(detailEquipeDTO.getSalle());</span>
+<span class="fc" id="L52">        detailEquipe.setThematique(detailEquipeDTO.getThematique());</span>
+<span class="fc" id="L53">        detailEquipe.setEquipe(detailEquipeDTO.getEquipe());</span>
+<span class="fc" id="L54">        return detailEquipe;</span>
+    }
 
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.10.202304240956</span></div></body></html>

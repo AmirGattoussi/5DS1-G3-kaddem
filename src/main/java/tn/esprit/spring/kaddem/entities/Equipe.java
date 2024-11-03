@@ -1,6 +1,9 @@
 package tn.esprit.spring.kaddem.entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import org.hibernate.engine.internal.Cascade;
 
 import java.io.Serializable;
 import java.util.Set;
@@ -21,8 +24,9 @@ public class Equipe implements Serializable{
     @JsonIgnore
     private Set<Etudiant> etudiants;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "id_detail_equipe")
+    @JsonBackReference
     private DetailEquipe detailEquipe;
 
     public Equipe() {

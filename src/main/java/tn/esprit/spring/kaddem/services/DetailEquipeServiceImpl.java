@@ -2,10 +2,8 @@ package tn.esprit.spring.kaddem.services;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import tn.esprit.spring.kaddem.entities.Departement;
 import tn.esprit.spring.kaddem.entities.DetailEquipe;
 import tn.esprit.spring.kaddem.entities.Equipe;
-import tn.esprit.spring.kaddem.entities.Universite;
 import tn.esprit.spring.kaddem.repositories.DetailEquipeRepository;
 import tn.esprit.spring.kaddem.repositories.EquipeRepository;
 
@@ -52,12 +50,14 @@ public class DetailEquipeServiceImpl implements IDetailEquipeService {
         log.info("Equipe found with ID {}: {}", idEquipe, e);
 
         de.setEquipe(e);
+        e.setDetailEquipe(de);
 
         log.info("Assigning DetailEquipe with ID {} to Equipe with ID {}", de.getIdDetailEquipe(), idEquipe);
         DetailEquipe savedDetailEquipe = detailEquipeRepository.save(de);
+        equipeRepository.save(e);
         log.debug("DetailEquipe added: {}", savedDetailEquipe);
 
-        log.info("Assigned DetailEquipe with ID {} to Equipe with ID {}", savedDetailEquipe.getIdDetailEquipe(), idEquipe);
+        log.info("Assigned DetailEquipe with ID {} to Equipe with ID {}", de.getIdDetailEquipe(), idEquipe);
     }
 
     @Override
@@ -65,6 +65,14 @@ public class DetailEquipeServiceImpl implements IDetailEquipeService {
         log.info("Deleting DetailEquipe with ID: {}", idDetailEquipe);
         try {
             DetailEquipe de = retrieveDetailEquipe(idDetailEquipe);
+
+            // Find the Equipe that references this DetailEquipe
+            Equipe equipe = equipeRepository.findById((de.getEquipe()).getIdEquipe()).get();
+
+            // Set the Equipe's detailEquipe reference to null
+            equipe.setDetailEquipe(null);
+            equipeRepository.save(equipe);
+
             detailEquipeRepository.delete(de);
             log.debug("DetailEquipe with ID {} deleted successfully", idDetailEquipe);
         } catch (Exception e) {
@@ -73,10 +81,32 @@ public class DetailEquipeServiceImpl implements IDetailEquipeService {
     }
 
     @Override
-    public DetailEquipe updateDetailEquipe(DetailEquipe de) {
-        log.info("Updating DetailEquipe with details: {}", de);
-        DetailEquipe updatedDetailEquipe = detailEquipeRepository.save(de);
-        log.debug("DetailEquipe updated: {}", updatedDetailEquipe);
+    public DetailEquipe updateDetailEquipe(DetailEquipe de, Integer idDetailEquipe) {
+        log.info("Updating DetailEquipe ID {} with details: {}", idDetailEquipe, de);
+        DetailEquipe newDe = null;
+
+        try {
+            // Retrieve the existing DetailEquipe
+            newDe = retrieveDetailEquipe(idDetailEquipe); // This method will throw an exception if not found
+        } catch (RuntimeException e) {
+            log.warn("DetailEquipe ID {} not found for update. Exception: {}", idDetailEquipe, e.getMessage());
+            return null;  // Return null if the DetailEquipe is not found
+        }
+
+        // Update only non-null fields from de to newDe
+        if (de.getSalle() != null) {
+            newDe.setSalle(de.getSalle());
+        }
+        if (de.getThematique() != null) {
+            newDe.setThematique(de.getThematique());
+        }
+        if (de.getEquipe() != null) {
+            newDe.setEquipe(de.getEquipe());
+        }
+
+        // Save the updated DetailEquipe
+        DetailEquipe updatedDetailEquipe = detailEquipeRepository.save(newDe);
+        log.debug("DetailEquipe ID {} updated: {}", idDetailEquipe, updatedDetailEquipe);
         return updatedDetailEquipe;
     }
 

@@ -10,6 +10,6 @@ public interface IDetailEquipeService {
     public DetailEquipe retrieveDetailEquipe(Integer idDetailEquipe);
     public void addAndAssignDetailEquipeToEquipe(DetailEquipe de, Integer idEquipe);
     public  void deleteDetailEquipe(Integer idDetailEquipe);
-    public DetailEquipe updateDetailEquipe(DetailEquipe de);
+    public DetailEquipe updateDetailEquipe(DetailEquipe de, Integer idDetailEquipe);
 
 }

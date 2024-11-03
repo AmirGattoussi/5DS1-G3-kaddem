@@ -1,5 +1,6 @@
 package tn.esprit.spring.kaddem.entities;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -22,6 +23,7 @@ public class DetailEquipe implements Serializable{
     @Getter
     @Setter
     @OneToOne(mappedBy="detailEquipe")
+    @JsonManagedReference
     private Equipe equipe;
 
     public DetailEquipe() {
