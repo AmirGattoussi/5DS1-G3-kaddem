@@ -15,7 +15,7 @@ services:
       - mysqldb_data:/var/lib/mysql
 
   springapp:
-    image: meherbs123/MEHERBENSALEM-5DS1-G3-kaddem
+    image: meherbs123/meherbensalem-5ds1-g3-kaddem
     container_name: springapp
     depends_on:
       - mysqldb
