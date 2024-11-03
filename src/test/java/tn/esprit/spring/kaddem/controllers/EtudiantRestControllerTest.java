@@ -1,5 +1,6 @@
 package tn.esprit.spring.kaddem.controllers;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.*;
 
@@ -11,6 +12,7 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import tn.esprit.spring.kaddem.dto.EtudiantDTO;
 import tn.esprit.spring.kaddem.entities.Etudiant;
 import tn.esprit.spring.kaddem.entities.Option;
 import tn.esprit.spring.kaddem.services.IEtudiantService;
@@ -85,4 +87,23 @@ class EtudiantRestControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON));
     }
+    @Test
+    void testConvertToEntity() {
+        // Given
+        EtudiantDTO etudiantDTO = new EtudiantDTO();
+        etudiantDTO.setIdEtudiant(1);
+        etudiantDTO.setNomE("John");
+        etudiantDTO.setPrenomE("Doe");
+        etudiantDTO.setOp("SE"); // Assuming Option has a value "SE"
+
+        // When
+        Etudiant etudiant = etudiantRestController.convertToEntity(etudiantDTO);
+
+        // Then
+        assertEquals(etudiantDTO.getIdEtudiant(), etudiant.getIdEtudiant());
+        assertEquals(etudiantDTO.getNomE(), etudiant.getNomE());
+        assertEquals(etudiantDTO.getPrenomE(), etudiant.getPrenomE());
+        assertEquals(Option.valueOf(etudiantDTO.getOp()), etudiant.getOp());
+    }
+
 }

@@ -69,9 +69,7 @@ public class EtudiantRestController {
 	public List<Etudiant> getEtudiantsParDepartement(@PathVariable("idDepartement") Integer idDepartement) {
 		return etudiantService.getEtudiantsByDepartement(idDepartement);
 	}
-
-	// Helper method to convert EtudiantDTO to Etudiant
-	private Etudiant convertToEntity(EtudiantDTO etudiantDTO) {
+	public Etudiant convertToEntity(EtudiantDTO etudiantDTO) {
 		Etudiant etudiant = new Etudiant();
 		etudiant.setIdEtudiant(etudiantDTO.getIdEtudiant());
 		etudiant.setNomE(etudiantDTO.getNomE());

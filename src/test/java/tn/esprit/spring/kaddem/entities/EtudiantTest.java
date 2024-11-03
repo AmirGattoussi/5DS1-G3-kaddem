@@ -5,7 +5,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.Arrays;
 import java.util.HashSet;
-import java.util.List;
 
 class EtudiantTest {
 
@@ -24,15 +23,14 @@ class EtudiantTest {
 
     @Test
     void testAllArgsConstructor() {
-        // Test the all-args constructor
         Etudiant etudiant = new Etudiant(1, "John", "Doe", Option.SE);
         assertEquals(1, etudiant.getIdEtudiant());
         assertEquals("John", etudiant.getNomE());
         assertEquals("Doe", etudiant.getPrenomE());
         assertEquals(Option.SE, etudiant.getOp());
-        assertNull(etudiant.getContrats()); // Should be null initially
-        assertNull(etudiant.getDepartement()); // Should be null initially
-        assertNull(etudiant.getEquipes()); // Should be null initially
+        assertNull(etudiant.getContrats());
+        assertNull(etudiant.getDepartement());
+        assertNull(etudiant.getEquipes());
     }
 
     @Test
