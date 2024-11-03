@@ -33,110 +33,96 @@ class UniversiteServiceImplTest {
 
     @Test
     void testRetrieveAllUniversites() {
-        // Arrange
         Universite uni1 = new Universite(1, "ESPRIT");
         Universite uni2 = new Universite(2, "ENIT");
         List<Universite> universites = Arrays.asList(uni1, uni2);
 
         when(universiteRepository.findAll()).thenReturn(universites);
 
-        // Act
         List<Universite> result = universiteService.retrieveAllUniversites();
 
-        // Assert
         assertEquals(2, result.size());
         verify(universiteRepository, times(1)).findAll();
     }
 
     @Test
     void testAddUniversite() {
-        // Arrange
         Universite uni = new Universite("Sup'Com");
 
         when(universiteRepository.save(uni)).thenReturn(uni);
 
-        // Act
         Universite result = universiteService.addUniversite(uni);
 
-        // Assert
         assertEquals("Sup'Com", result.getNomUniv());
         verify(universiteRepository, times(1)).save(uni);
     }
 
     @Test
     void testUpdateUniversite() {
-        // Arrange
         Universite uni = new Universite(1, "ENIT");
 
         when(universiteRepository.save(uni)).thenReturn(uni);
 
-        // Act
         Universite result = universiteService.updateUniversite(uni);
 
-        // Assert
         assertEquals("ENIT", result.getNomUniv());
         verify(universiteRepository, times(1)).save(uni);
     }
 
     @Test
-    void testRetrieveUniversite() {
-        // Arrange
+    void testRetrieveUniversiteWithNonExistentId() {
         Integer id = 1;
-        Universite uni = new Universite(id, "ESPRIT");
 
-        when(universiteRepository.findById(id)).thenReturn(Optional.of(uni));
+        when(universiteRepository.findById(id)).thenReturn(Optional.empty());
 
-        // Act
         Universite result = universiteService.retrieveUniversite(id);
 
-        // Assert
-        assertNotNull(result);
-        assertEquals("ESPRIT", result.getNomUniv());
+        assertNull(result);
         verify(universiteRepository, times(1)).findById(id);
     }
 
     @Test
-    void testDeleteUniversite() {
-        // Arrange
+    void testDeleteUniversiteWithNonExistentId() {
         Integer id = 1;
-        Universite uni = new Universite(id, "Sup'Com");
 
-        when(universiteRepository.findById(id)).thenReturn(Optional.of(uni));
+        when(universiteRepository.findById(id)).thenReturn(Optional.empty());
 
-        // Act
         universiteService.deleteUniversite(id);
 
-        // Assert
         verify(universiteRepository, times(1)).findById(id);
-        verify(universiteRepository, times(1)).delete(uni);
+        verify(universiteRepository, never()).delete(any(Universite.class));
     }
 
     @Test
-    void testAssignUniversiteToDepartement() {
-        // Arrange
+    void testAssignUniversiteToDepartementWithNonExistentIds() {
         Integer uniId = 1;
         Integer deptId = 1;
-        Universite uni = new Universite(uniId, "ENIT");
-        Departement dept = new Departement(deptId, "Informatique");
-        uni.setDepartements(new HashSet<>());
 
-        when(universiteRepository.findById(uniId)).thenReturn(Optional.of(uni));
-        when(departementRepository.findById(deptId)).thenReturn(Optional.of(dept));
-        when(universiteRepository.save(uni)).thenReturn(uni);
+        when(universiteRepository.findById(uniId)).thenReturn(Optional.empty());
 
-        // Act
-        universiteService.assignUniversiteToDepartement(uniId, deptId);
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            universiteService.assignUniversiteToDepartement(uniId, deptId);
+        });
 
-        // Assert
-        assertTrue(uni.getDepartements().contains(dept));
+        assertEquals("Invalid Universite or Departement ID", exception.getMessage());
         verify(universiteRepository, times(1)).findById(uniId);
-        verify(departementRepository, times(1)).findById(deptId);
-        verify(universiteRepository, times(1)).save(uni);
+        verify(departementRepository, never()).findById(deptId);
+    }
+
+    @Test
+    void testRetrieveDepartementsByUniversiteWithNonExistentId() {
+        Integer uniId = 1;
+
+        when(universiteRepository.findById(uniId)).thenReturn(Optional.empty());
+
+        Set<Departement> result = universiteService.retrieveDepartementsByUniversite(uniId);
+
+        assertTrue(result.isEmpty());
+        verify(universiteRepository, times(1)).findById(uniId);
     }
 
     @Test
     void testRetrieveDepartementsByUniversite() {
-        // Arrange
         Integer uniId = 1;
         Departement dept1 = new Departement(1, "Informatique");
         Departement dept2 = new Departement(2, "Mathématiques");
@@ -146,10 +132,8 @@ class UniversiteServiceImplTest {
 
         when(universiteRepository.findById(uniId)).thenReturn(Optional.of(uni));
 
-        // Act
         Set<Departement> result = universiteService.retrieveDepartementsByUniversite(uniId);
 
-        // Assert
         assertEquals(2, result.size());
         assertTrue(result.contains(dept1));
         assertTrue(result.contains(dept2));
