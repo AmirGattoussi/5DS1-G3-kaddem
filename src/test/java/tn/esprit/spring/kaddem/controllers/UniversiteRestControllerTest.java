@@ -19,6 +19,7 @@ import java.util.Optional;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
@@ -132,4 +133,73 @@ class UniversiteRestControllerTest {
         assertEquals(2, result.size());
         verify(universiteService, times(1)).retrieveDepartementsByUniversite(1);
     }
+    @Test
+    void testUpdateUniversite_NomUnivIsNull() {
+        // Arrange
+        UpdateUniversiteDTO universiteDTO = new UpdateUniversiteDTO();
+        universiteDTO.setIdUniv(1);
+        universiteDTO.setNomUniv(null);  // Simulate a null name update
+
+        Universite universite = new Universite(1, "Original University");
+
+        // Mocking behavior
+        when(universiteService.retrieveUniversite(1)).thenReturn(universite);
+        when(universiteService.updateUniversite(any(Universite.class))).thenReturn(universite);
+
+        // Act
+        Universite result = universiteRestController.updateUniversite(universiteDTO);
+
+        // Assert
+        assertEquals("Original University", result.getNomUniv(), "Name should remain unchanged");
+        verify(universiteService, times(1)).updateUniversite(any(Universite.class));
+    }
+    @Test
+    void testUpdateUniversite_DepartementIdsIsNull() {
+        // Arrange
+        UpdateUniversiteDTO universiteDTO = new UpdateUniversiteDTO();
+        universiteDTO.setIdUniv(1);
+        universiteDTO.setNomUniv("Updated University");
+        universiteDTO.setDepartementIds(null);  // Simulate null department IDs
+
+        Universite universite = new Universite(1, "Original University");
+        Set<Departement> originalDepartements = new HashSet<>();
+        universite.setDepartements(originalDepartements);
+
+        // Mocking behavior
+        when(universiteService.retrieveUniversite(1)).thenReturn(universite);
+        when(universiteService.updateUniversite(any(Universite.class))).thenReturn(universite);
+
+        // Act
+        Universite result = universiteRestController.updateUniversite(universiteDTO);
+
+        // Assert
+        assertEquals("Updated University", result.getNomUniv());
+        assertEquals(originalDepartements, result.getDepartements(), "Departements should remain unchanged");
+        verify(universiteService, times(1)).updateUniversite(any(Universite.class));
+    }
+    @Test
+    void testUpdateUniversite_DepartementIsNull() {
+        // Arrange
+        UpdateUniversiteDTO universiteDTO = new UpdateUniversiteDTO();
+        universiteDTO.setIdUniv(1);
+        universiteDTO.setDepartementIds(new HashSet<>(Arrays.asList(1, 2)));
+
+        Universite universite = new Universite(1, "University");
+        Departement departement1 = new Departement(1, "Informatique");
+
+        // Mock behavior: one department exists, the other does not
+        when(universiteService.retrieveUniversite(1)).thenReturn(universite);
+        when(departementRepository.findById(1)).thenReturn(Optional.of(departement1));
+        when(departementRepository.findById(2)).thenReturn(Optional.empty());
+        when(universiteService.updateUniversite(any(Universite.class))).thenReturn(universite);
+
+        // Act
+        Universite result = universiteRestController.updateUniversite(universiteDTO);
+
+        // Assert
+        assertEquals(1, result.getDepartements().size(), "Only one department should be added");
+        assertTrue(result.getDepartements().contains(departement1), "The non-null department should be added");
+        verify(universiteService, times(1)).updateUniversite(any(Universite.class));
+    }
+
 }

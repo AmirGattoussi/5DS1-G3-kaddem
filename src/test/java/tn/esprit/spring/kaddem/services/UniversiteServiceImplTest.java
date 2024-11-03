@@ -155,4 +155,22 @@ class UniversiteServiceImplTest {
         assertTrue(result.contains(dept2));
         verify(universiteRepository, times(1)).findById(uniId);
     }
+    @Test
+    void testAssignUniversiteToDepartement_NullUniversite() {
+        // Arrange
+        Integer uniId = 1;
+        Integer deptId = 1;
+
+        // Simulate that the Universite is not found (returns empty Optional)
+        when(universiteRepository.findById(uniId)).thenReturn(Optional.empty());
+
+        // Act & Assert
+        assertThrows(AssertionError.class, () -> {
+            universiteService.assignUniversiteToDepartement(uniId, deptId);
+        });
+
+        // Verify that no interaction happened with departementRepository and universiteRepository save.
+        verify(departementRepository, never()).findById(anyInt());
+        verify(universiteRepository, never()).save(any(Universite.class));
+    }
 }
