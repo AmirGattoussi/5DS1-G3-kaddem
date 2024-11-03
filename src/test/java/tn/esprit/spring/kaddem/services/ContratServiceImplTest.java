@@ -11,7 +11,6 @@ import tn.esprit.spring.kaddem.entities.Etudiant;
 import tn.esprit.spring.kaddem.entities.Specialite;
 import tn.esprit.spring.kaddem.repositories.ContratRepository;
 import tn.esprit.spring.kaddem.repositories.EtudiantRepository;
-import tn.esprit.spring.kaddem.services.ContratServiceImpl;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -118,7 +117,7 @@ class ContratServiceImplTest {
     }
 
     @Test
-    public void testGetChiffreAffaireEntreDeuxDates() throws ParseException {
+    void testGetChiffreAffaireEntreDeuxDates() throws ParseException {
         // Arrange
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
