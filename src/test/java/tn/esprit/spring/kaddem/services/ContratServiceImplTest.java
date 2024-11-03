@@ -144,7 +144,7 @@ class ContratServiceImplTest {
         float result = contratService.getChiffreAffaireEntreDeuxDates(startDate, endDate);
 
         // Assert
-        float expectedChiffreAffaire = 2100.0f; 
+        float expectedChiffreAffaire = 2100.0f;
         assertEquals(expectedChiffreAffaire, result, 0.01);
     }
 
