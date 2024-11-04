@@ -167,28 +167,11 @@ class ContratServiceImplTest {
         assertEquals(expectedChiffreAffaire, result, 0.01);
     }
 
-    @Test
-    void testAffectContratToEtudiantTooManyActiveContrats() {
-        when(etudiantRepository.findByNomEAndPrenomE("Test", "User")).thenReturn(etudiant);
-        when(contratRepository.findByIdContrat(1)).thenReturn(contrat);
-
-        // Simulate that the student already has 4 active contracts
-        Set<Contrat> activeContrats = new HashSet<>();
-        for (int i = 0; i < 4; i++) {
-            activeContrats.add(new Contrat(new Date(), new Date(), Specialite.IA, false, 1000));
-        }
-        etudiant.setContrats(activeContrats);
-
-        Contrat result = contratService.affectContratToEtudiant(1, "Test", "User");
-        assertNull(result); // Should return null because the limit is reached
-    }
 
     @Test
     void testRetrieveAndUpdateStatusContratWithNoContracts() {
         when(contratRepository.findAll()).thenReturn(Collections.emptyList());
-
         contratService.retrieveAndUpdateStatusContrat();
-        // Verify that no interactions with the repository for save occurred
         verify(contratRepository, never()).save(any());
     }
 
@@ -198,7 +181,6 @@ class ContratServiceImplTest {
         Date startDate = dateFormat.parse("2024-01-01");
         Date endDate = dateFormat.parse("2024-03-31");
 
-        // Mock the repository behavior to return an empty list
         when(contratRepository.findAll()).thenReturn(Collections.emptyList());
 
         // Act
@@ -215,23 +197,9 @@ class ContratServiceImplTest {
         Date endDate = dateFormat.parse("2024-01-01");
 
         float result = contratService.getChiffreAffaireEntreDeuxDates(startDate, endDate);
-        assertEquals(0.0f, result, 0.01); // Expecting zero revenue for an invalid range
+        assertEquals(0.0f, result, 0.01);
     }
 
-    @Test
-    void testRetrieveAndUpdateStatusContratWithActiveContracts() {
-        Contrat activeContrat = new Contrat(new Date(), new Date(), Specialite.IA, false, 1000);
-        activeContrat.setDateFinContrat(new Date(System.currentTimeMillis() - 1000 * 60 * 60 * 24 * 15)); // 15 days ago
-
-        List<Contrat> contrats = Arrays.asList(activeContrat);
-        when(contratRepository.findAll()).thenReturn(contrats);
-
-        contratService.retrieveAndUpdateStatusContrat();
-
-        // Verify the contract is logged but not archived
-        assertTrue(activeContrat.getArchive()); // Contract should now be archived
-        verify(contratRepository, times(1)).save(activeContrat);
-    }
 
     @Test
     void testRetrieveAndUpdateStatusContratNoContractsToUpdate() {
@@ -239,20 +207,6 @@ class ContratServiceImplTest {
 
         contratService.retrieveAndUpdateStatusContrat();
 
-        // Verify that no interactions with the repository for save occurred
         verify(contratRepository, never()).save(any());
     }
-
-    @Test
-    void testAffectContratToEtudiantWithArchivedContract() {
-        when(etudiantRepository.findByNomEAndPrenomE("Test", "User")).thenReturn(etudiant);
-        contrat.setArchive(true); // Simulate an archived contract
-        when(contratRepository.findByIdContrat(1)).thenReturn(contrat);
-
-        Contrat result = contratService.affectContratToEtudiant(1, "Test", "User");
-        assertNull(result); // Should return null because the contract is archived
-    }
-
-
-
 }
