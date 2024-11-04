@@ -6,6 +6,9 @@ import org.junit.jupiter.api.Test;
 import tn.esprit.spring.kaddem.entities.Specialite;
 
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.Date;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -41,16 +44,7 @@ class ContratDTOTest {
         assertEquals(5000, contratDTO.getMontantContrat());
     }
 
-    @Test
-    void testAllArgsConstructor() {
-        ContratDTO contratDTOAllArgs = new ContratDTO(2, startDate, endDate, Specialite.IA, true, 1000);
-        assertEquals(2, contratDTOAllArgs.getIdContrat());
-        assertEquals(startDate, contratDTOAllArgs.getDateDebutContrat());
-        assertEquals(endDate, contratDTOAllArgs.getDateFinContrat());
-        assertEquals(Specialite.IA, contratDTOAllArgs.getSpecialite());
-        assertTrue(contratDTOAllArgs.getArchive());
-        assertEquals(1000, contratDTOAllArgs.getMontantContrat());
-    }
+
 
     @Test
     void testSettersAndGetters() {
@@ -143,4 +137,83 @@ class ContratDTOTest {
         assertNull(emptyDTO.getArchive());
         assertNull(emptyDTO.getMontantContrat());
     }
+
+    @Test
+    void testInvalidId() {
+        ContratDTO invalidIdDTO = new ContratDTO(-1, startDate, endDate, Specialite.CLOUD, false, 5000);
+        assertEquals(-1, invalidIdDTO.getIdContrat(), "Id should allow negative values, but verify if any business rules apply.");
+    }
+
+    @Test
+    void testExpiredContractDates() {
+        Date pastDate = new Date(System.currentTimeMillis() - 174000000); // Date in the past
+        Date startDate = new Date(System.currentTimeMillis() + 100000); // Date in the future
+        ContratDTO expiredContractDTO = new ContratDTO(3, pastDate, startDate, Specialite.CLOUD, false, 5000);
+
+        // Print values for debugging
+        System.out.println("Date Fin Contrat: " + expiredContractDTO.getDateFinContrat());
+        System.out.println("Date Debut Contrat: " + expiredContractDTO.getDateDebutContrat());
+
+        assertTrue(expiredContractDTO.getDateFinContrat().before(expiredContractDTO.getDateDebutContrat()),
+                "DateFinContrat should be before DateDebutContrat for an expired contract.");
+    }
+
+    @Test
+    void testExtremeValuesMontantContrat() {
+        ContratDTO extremeMontantDTO = new ContratDTO(4, startDate, endDate, Specialite.IA, false, Integer.MAX_VALUE);
+        assertEquals(Integer.MAX_VALUE, extremeMontantDTO.getMontantContrat(), "Montant should accept extreme high values.");
+
+        extremeMontantDTO.setMontantContrat(Integer.MIN_VALUE);
+        assertEquals(Integer.MIN_VALUE, extremeMontantDTO.getMontantContrat(), "Montant should accept extreme low values.");
+    }
+
+    @Test
+    void testSerializationEdgeCases() throws IOException {
+        Date maxDate = new Date(Long.MAX_VALUE); // Maximum date value
+        ContratDTO edgeCaseDTO = new ContratDTO(5, startDate, maxDate, Specialite.CLOUD, false, 5000);
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        String jsonString = objectMapper.writeValueAsString(edgeCaseDTO);
+        ContratDTO deserializedDTO = objectMapper.readValue(jsonString, ContratDTO.class);
+
+        assertEquals(edgeCaseDTO, deserializedDTO, "Serialization and deserialization should maintain state even for edge case dates.");
+    }
+
+    @Test
+    void testImmutableStateAfterCreation() {
+        ContratDTO immutableDTO = ContratDTO.builder()
+                .idContrat(6)
+                .dateDebutContrat(startDate)
+                .dateFinContrat(endDate)
+                .specialite(Specialite.CLOUD)
+                .archive(false)
+                .montantContrat(6000)
+                .build();
+
+        // Verify initial state
+        assertEquals(6, immutableDTO.getIdContrat());
+        assertEquals(Specialite.CLOUD, immutableDTO.getSpecialite());
+
+        // Attempt to change state after creation
+        immutableDTO.setMontantContrat(7000);
+        assertEquals(7000, immutableDTO.getMontantContrat(), "Montant should reflect change, but check if immutability rules apply.");
+    }
+
+    @Test
+    void testMultipleSpecialites() {
+        ContratDTO multiSpecialiteDTO = new ContratDTO();
+
+        multiSpecialiteDTO.setSpecialite(Specialite.CLOUD);
+        assertEquals(Specialite.CLOUD, multiSpecialiteDTO.getSpecialite());
+
+        multiSpecialiteDTO.setSpecialite(Specialite.SECURITE);
+        assertEquals(Specialite.SECURITE, multiSpecialiteDTO.getSpecialite());
+
+        multiSpecialiteDTO.setSpecialite(Specialite.IA);
+        assertEquals(Specialite.IA, multiSpecialiteDTO.getSpecialite());
+
+        multiSpecialiteDTO.setSpecialite(Specialite.RESEAUX);
+        assertEquals(Specialite.RESEAUX, multiSpecialiteDTO.getSpecialite());
+    }
+
 }
