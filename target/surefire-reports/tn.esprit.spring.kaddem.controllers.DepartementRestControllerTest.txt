@@ -1,4 +1,4 @@
 -------------------------------------------------------------------------------
 Test set: tn.esprit.spring.kaddem.controllers.DepartementRestControllerTest
 -------------------------------------------------------------------------------
-Tests run: 5, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 2.267 s - in tn.esprit.spring.kaddem.controllers.DepartementRestControllerTest
+Tests run: 5, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.359 s - in tn.esprit.spring.kaddem.controllers.DepartementRestControllerTest

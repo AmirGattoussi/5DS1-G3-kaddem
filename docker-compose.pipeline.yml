@@ -11,14 +11,6 @@ services:
     volumes:
       - grafana-data:/var/lib/grafana
 
-  prometheus:
-    image: prom/prometheus
-    container_name: prometheus
-    ports:
-      - "9090:9090"
-    volumes:
-      - /home/vagrant/5DS1-G3-kaddem/prometheus.yml:/etc/prometheus/prometheus.yml
-
   nexus:
     image: klo2k/nexus3
     container_name: nexus
@@ -48,6 +40,14 @@ services:
       - SONAR_JDBC_URL=jdbc:postgresql://db:5432/kaddem
       - SONAR_JDBC_USERNAME=sonar
       - SONAR_JDBC_PASSWORD=sonar
+
+  prometheus:
+    image: prom/prometheus
+    container_name: prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - /home/vagrant/5DS1-G3-kaddem/prometheus.yml:/etc/prometheus/prometheus.yml
 
 volumes:
   grafana-data:
