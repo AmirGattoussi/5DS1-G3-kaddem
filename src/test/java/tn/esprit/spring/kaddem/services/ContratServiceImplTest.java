@@ -6,18 +6,22 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import tn.esprit.spring.kaddem.dto.ContratDTO;
 import tn.esprit.spring.kaddem.entities.Contrat;
 import tn.esprit.spring.kaddem.entities.Etudiant;
 import tn.esprit.spring.kaddem.entities.Specialite;
 import tn.esprit.spring.kaddem.repositories.ContratRepository;
 import tn.esprit.spring.kaddem.repositories.EtudiantRepository;
 
+import javax.persistence.EntityNotFoundException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @ExtendWith(MockitoExtension.class)
 class ContratServiceImplTest {
@@ -33,6 +37,9 @@ class ContratServiceImplTest {
 
     private Contrat contrat;
     private Etudiant etudiant;
+
+    private static final Logger log = LoggerFactory.getLogger(ContratServiceImplTest.class);
+
 
     @BeforeEach
     void setUp() {
@@ -222,4 +229,18 @@ class ContratServiceImplTest {
         verify(contratRepository, times(1)).getnbContratsValides(startDate, endDate);
     }
 
+    @Test
+    void testCountActiveContrats() {
+        // Arrange
+        List<ContratDTO> contrats = new ArrayList<>();
+        ContratDTO activeContrat = new ContratDTO();
+        activeContrat.setArchive(false);
+        contrats.add(activeContrat);
+
+        // Assume your method processes these contracts
+        int activeCount = contratService.countActiveContrats(contrats); // Modify according to your service method
+
+        // Assert
+        assertEquals(1, activeCount);
+    }
 }
