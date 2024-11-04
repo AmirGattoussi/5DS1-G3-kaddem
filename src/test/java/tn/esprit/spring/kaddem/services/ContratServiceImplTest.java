@@ -208,5 +208,51 @@ class ContratServiceImplTest {
         assertEquals(0.0f, result, 0.01); // Expecting zero revenue
     }
 
+    @Test
+    void testGetChiffreAffaireEntreDeuxDatesInvalidRange() throws ParseException {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        Date startDate = dateFormat.parse("2024-03-31");
+        Date endDate = dateFormat.parse("2024-01-01");
+
+        float result = contratService.getChiffreAffaireEntreDeuxDates(startDate, endDate);
+        assertEquals(0.0f, result, 0.01); // Expecting zero revenue for an invalid range
+    }
+
+    @Test
+    void testRetrieveAndUpdateStatusContratWithActiveContracts() {
+        Contrat activeContrat = new Contrat(new Date(), new Date(), Specialite.IA, false, 1000);
+        activeContrat.setDateFinContrat(new Date(System.currentTimeMillis() - 1000 * 60 * 60 * 24 * 15)); // 15 days ago
+
+        List<Contrat> contrats = Arrays.asList(activeContrat);
+        when(contratRepository.findAll()).thenReturn(contrats);
+
+        contratService.retrieveAndUpdateStatusContrat();
+
+        // Verify the contract is logged but not archived
+        assertTrue(activeContrat.getArchive()); // Contract should now be archived
+        verify(contratRepository, times(1)).save(activeContrat);
+    }
+
+    @Test
+    void testRetrieveAndUpdateStatusContratNoContractsToUpdate() {
+        when(contratRepository.findAll()).thenReturn(Collections.emptyList());
+
+        contratService.retrieveAndUpdateStatusContrat();
+
+        // Verify that no interactions with the repository for save occurred
+        verify(contratRepository, never()).save(any());
+    }
+
+    @Test
+    void testAffectContratToEtudiantWithArchivedContract() {
+        when(etudiantRepository.findByNomEAndPrenomE("Test", "User")).thenReturn(etudiant);
+        contrat.setArchive(true); // Simulate an archived contract
+        when(contratRepository.findByIdContrat(1)).thenReturn(contrat);
+
+        Contrat result = contratService.affectContratToEtudiant(1, "Test", "User");
+        assertNull(result); // Should return null because the contract is archived
+    }
+
+
 
 }

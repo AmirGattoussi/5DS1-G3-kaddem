@@ -1,12 +1,13 @@
 package tn.esprit.spring.kaddem.dto;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import tn.esprit.spring.kaddem.entities.Specialite;
 
+import java.io.IOException;
 import java.util.Date;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 class ContratDTOTest {
 
@@ -111,4 +112,71 @@ class ContratDTOTest {
         assertNotNull(result);
         System.out.println(result); // Optional: to view the output
     }
+
+    @Test
+    void testNullValues() {
+        ContratDTO contratDTO = new ContratDTO();
+
+        // Test setting null values
+        assertThrows(NullPointerException.class, () -> {
+            contratDTO.setSpecialite(null);
+        });
+    }
+
+    @Test
+    void testMontantContratBoundary() {
+        ContratDTO contratDTO = new ContratDTO();
+
+        contratDTO.setMontantContrat(0);
+        assertEquals(0, contratDTO.getMontantContrat());
+
+        assertThrows(IllegalArgumentException.class, () -> {
+            contratDTO.setMontantContrat(-1000);
+        });
+    }
+
+    @Test
+    void testInvalidDateRange() {
+        ContratDTO contratDTO = new ContratDTO();
+        Date startDate = new Date(System.currentTimeMillis() + 100000); // Future date
+        Date endDate = new Date(System.currentTimeMillis()); // Past date
+
+        assertThrows(IllegalArgumentException.class, () -> {
+            contratDTO.setDateDebutContrat(startDate);
+            contratDTO.setDateFinContrat(endDate); // Assuming this should not be allowed
+        });
+    }
+
+    @Test
+    void testSerialization() throws IOException {
+        ContratDTO contratDTO = ContratDTO.builder()
+                .idContrat(1)
+                .dateDebutContrat(new Date())
+                .dateFinContrat(new Date())
+                .specialite(Specialite.CLOUD)
+                .archive(false)
+                .montantContrat(5000)
+                .build();
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        String jsonString = objectMapper.writeValueAsString(contratDTO);
+
+        ContratDTO deserializedDTO = objectMapper.readValue(jsonString, ContratDTO.class);
+        assertEquals(contratDTO, deserializedDTO);
+    }
+
+    @Test
+    void testDefaultValues() {
+        ContratDTO contratDTO = new ContratDTO();
+
+        assertEquals(0, contratDTO.getIdContrat()); // Assuming default ID is 0
+        assertNull(contratDTO.getDateDebutContrat()); // Assuming null by default
+        assertNull(contratDTO.getDateFinContrat());
+        assertNull(contratDTO.getSpecialite());
+        assertFalse(contratDTO.getArchive()); // Assuming default is false
+        assertEquals(0, contratDTO.getMontantContrat()); // Assuming default is 0
+    }
+
+
+
 }
