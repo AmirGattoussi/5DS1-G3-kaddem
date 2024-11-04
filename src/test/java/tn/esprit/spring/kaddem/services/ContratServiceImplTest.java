@@ -127,7 +127,7 @@ class ContratServiceImplTest {
         assertNull(result); // Assuming the method should return null or handle this case properly
         verify(contratRepository, never()).save(any());
     }
-    
+
     @Test
     void testNbContratsValides() {
         Date startDate = new Date();
@@ -166,5 +166,47 @@ class ContratServiceImplTest {
         float expectedChiffreAffaire = 2100.0f;
         assertEquals(expectedChiffreAffaire, result, 0.01);
     }
+
+    @Test
+    void testAffectContratToEtudiantTooManyActiveContrats() {
+        when(etudiantRepository.findByNomEAndPrenomE("Test", "User")).thenReturn(etudiant);
+        when(contratRepository.findByIdContrat(1)).thenReturn(contrat);
+
+        // Simulate that the student already has 4 active contracts
+        Set<Contrat> activeContrats = new HashSet<>();
+        for (int i = 0; i < 4; i++) {
+            activeContrats.add(new Contrat(new Date(), new Date(), Specialite.IA, false, 1000));
+        }
+        etudiant.setContrats(activeContrats);
+
+        Contrat result = contratService.affectContratToEtudiant(1, "Test", "User");
+        assertNull(result); // Should return null because the limit is reached
+    }
+
+    @Test
+    void testRetrieveAndUpdateStatusContratWithNoContracts() {
+        when(contratRepository.findAll()).thenReturn(Collections.emptyList());
+
+        contratService.retrieveAndUpdateStatusContrat();
+        // Verify that no interactions with the repository for save occurred
+        verify(contratRepository, never()).save(any());
+    }
+
+    @Test
+    void testGetChiffreAffaireEntreDeuxDatesNoContracts() throws ParseException {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        Date startDate = dateFormat.parse("2024-01-01");
+        Date endDate = dateFormat.parse("2024-03-31");
+
+        // Mock the repository behavior to return an empty list
+        when(contratRepository.findAll()).thenReturn(Collections.emptyList());
+
+        // Act
+        float result = contratService.getChiffreAffaireEntreDeuxDates(startDate, endDate);
+
+        // Assert
+        assertEquals(0.0f, result, 0.01); // Expecting zero revenue
+    }
+
 
 }
