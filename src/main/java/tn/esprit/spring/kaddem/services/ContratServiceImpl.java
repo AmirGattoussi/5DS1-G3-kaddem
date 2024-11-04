@@ -45,15 +45,21 @@ public class ContratServiceImpl implements IContratService {
 
 	public Contrat affectContratToEtudiant(Integer idContrat, String nomE, String prenomE) {
 		Etudiant e = etudiantRepository.findByNomEAndPrenomE(nomE, prenomE);
+		if (e == null) {
+			return null; // or throw new EntityNotFoundException("Etudiant not found");
+		}
+
 		Contrat ce = contratRepository.findByIdContrat(idContrat);
+		if (ce == null) {
+			return null; // or throw new EntityNotFoundException("Contrat not found");
+		}
+
 		Set<Contrat> contrats = e.getContrats();
 		Integer nbContratsActifs = 0;
 
-		if (!contrats.isEmpty()) {
-			for (Contrat contrat : contrats) {
-				if (contrat.getArchive() != null && contrat.getArchive()) {
-					nbContratsActifs++;
-				}
+		for (Contrat contrat : contrats) {
+			if (contrat.getArchive() != null && contrat.getArchive()) {
+				nbContratsActifs++;
 			}
 		}
 

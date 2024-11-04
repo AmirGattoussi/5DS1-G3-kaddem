@@ -124,7 +124,7 @@ class ContratServiceImplTest {
         when(etudiantRepository.findByNomEAndPrenomE("Test", "User")).thenReturn(null); // Student not found
 
         Contrat result = contratService.affectContratToEtudiant(1, "Test", "User");
-        assertNull(result); // The method should return null if the student is not found
+        assertNull(result); // Assuming the method should return null or handle this case properly
         verify(contratRepository, never()).save(any());
     }
     
