@@ -29,4 +29,8 @@ public ContratDTO(int id, Date dateFinContrat, Date dateDebutContrat, Specialite
     this.montantContrat = amount;
 }
 
+    public ContratDTO(Boolean archiveStatus) {
+        this.archive = archiveStatus;
+    }
+
 }

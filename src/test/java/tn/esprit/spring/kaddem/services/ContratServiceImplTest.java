@@ -13,7 +13,6 @@ import tn.esprit.spring.kaddem.entities.Specialite;
 import tn.esprit.spring.kaddem.repositories.ContratRepository;
 import tn.esprit.spring.kaddem.repositories.EtudiantRepository;
 
-import javax.persistence.EntityNotFoundException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -243,4 +242,40 @@ class ContratServiceImplTest {
         // Assert
         assertEquals(1, activeCount);
     }
+    @Test
+    void testCountActiveContratsWithEmptyList() {
+        List<ContratDTO> emptyList = Collections.emptyList();
+        int result = contratService.countActiveContrats(emptyList);
+        assertEquals(0, result); // Expect 0 active contracts
+    }
+
+    @Test
+    void testCountActiveContratsWithMixedContracts() {
+        ContratDTO activeContract = new ContratDTO(false);
+        ContratDTO archivedContract = new ContratDTO(true);
+        List<ContratDTO> contracts = List.of(activeContract, archivedContract);
+
+        int result = contratService.countActiveContrats(contracts);
+        assertEquals(1, result); // Expect 1 active contract
+    }
+
+    @Test
+    void testGetChiffreAffaireEntreDeuxDatesWithSpecialiteValues() throws ParseException {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        Date startDate = dateFormat.parse("2024-01-01");
+        Date endDate = dateFormat.parse("2024-03-31");
+
+        Contrat contrat1 = new Contrat(new Date(), new Date(), Specialite.IA, false, 1000);
+        Contrat contrat2 = new Contrat(new Date(), new Date(), Specialite.CLOUD, false, 1100);
+        Contrat contrat3 = new Contrat(new Date(), new Date(), Specialite.RESEAUX, false, 1200);
+
+        List<Contrat> contrats = List.of(contrat1, contrat2, contrat3);
+        when(contratRepository.findAll()).thenReturn(contrats);
+
+        float result = contratService.getChiffreAffaireEntreDeuxDates(startDate, endDate);
+
+        float expected = (3 * 300) + (3 * 400) + (3 * 350); // Expected revenue based on specialties and months
+        assertEquals(expected, result, 0.01);
+    }
+
 }
