@@ -14,20 +14,14 @@ import tn.esprit.spring.kaddem.repositories.EtudiantRepository;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class ContratServiceImplTest {
-    private static final Logger logger = LogManager.getLogger(ContratServiceImplTest.class);
+
     @Mock
     private ContratRepository contratRepository;
 
@@ -88,6 +82,15 @@ class ContratServiceImplTest {
     }
 
     @Test
+    void testRetrieveContratNotFound() {
+        when(contratRepository.findById(1)).thenReturn(Optional.empty());
+
+        Contrat result = contratService.retrieveContrat(1);
+        assertNull(result);  // Assuming the method returns null if not found
+        verify(contratRepository, times(1)).findById(1);
+    }
+
+    @Test
     void testRemoveContrat() {
         when(contratRepository.findById(1)).thenReturn(Optional.of(contrat));
 
@@ -96,8 +99,17 @@ class ContratServiceImplTest {
     }
 
     @Test
+    void testRemoveContratNotFound() {
+        when(contratRepository.findById(1)).thenReturn(Optional.empty());
+
+        assertThrows(NoSuchElementException.class, () -> {
+            contratService.removeContrat(1);
+        });
+        verify(contratRepository, never()).delete(any());
+    }
+
+    @Test
     void testAffectContratToEtudiant() {
-        // Mocking etudiant repository
         when(etudiantRepository.findByNomEAndPrenomE("Test", "User")).thenReturn(etudiant);
         when(contratRepository.findByIdContrat(1)).thenReturn(contrat);
         etudiant.setContrats(Set.of());  // Initialize empty contrats set for etudiant
@@ -105,6 +117,15 @@ class ContratServiceImplTest {
         Contrat result = contratService.affectContratToEtudiant(1, "Test", "User");
         assertEquals(etudiant, result.getEtudiant());
         verify(contratRepository, times(1)).save(contrat);
+    }
+
+    @Test
+    void testAffectContratToEtudiantNotFound() {
+        when(etudiantRepository.findByNomEAndPrenomE("Test", "User")).thenReturn(null); // Student not found
+
+        Contrat result = contratService.affectContratToEtudiant(1, "Test", "User");
+        assertNull(result); // Assuming the method should return null or handle this case properly
+        verify(contratRepository, never()).save(any());
     }
 
     @Test
@@ -128,11 +149,8 @@ class ContratServiceImplTest {
         List<Contrat> mockContrats = new ArrayList<>();
 
         // Create mock contracts with different specialties
-        Contrat contrat1 = new Contrat(/* parameters */);
-        contrat1.setSpecialite(Specialite.IA);
-
-        Contrat contrat2 = new Contrat(/* parameters */);
-        contrat2.setSpecialite(Specialite.CLOUD);
+        Contrat contrat1 = new Contrat(new Date(), new Date(), Specialite.IA, false, 1000);
+        Contrat contrat2 = new Contrat(new Date(), new Date(), Specialite.CLOUD, false, 1100);
 
         // Add contracts to the list
         mockContrats.add(contrat1);
@@ -149,6 +167,4 @@ class ContratServiceImplTest {
         assertEquals(expectedChiffreAffaire, result, 0.01);
     }
 
-
 }
-
