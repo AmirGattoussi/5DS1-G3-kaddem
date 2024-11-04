@@ -8,10 +8,7 @@ import tn.esprit.spring.kaddem.entities.Etudiant;
 import tn.esprit.spring.kaddem.repositories.ContratRepository;
 import tn.esprit.spring.kaddem.repositories.EtudiantRepository;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Slf4j
 @Service
@@ -39,10 +36,11 @@ public class ContratServiceImpl implements IContratService {
 	}
 
 	public void removeContrat(Integer idContrat) {
-		Contrat c = retrieveContrat(idContrat);
-		if (c != null) {
-			contratRepository.delete(c);
+		Optional<Contrat> contrat = contratRepository.findById(idContrat);
+		if (!contrat.isPresent()) {
+			throw new NoSuchElementException("Contract not found with id: " + idContrat);
 		}
+		contratRepository.delete(contrat.get());
 	}
 
 	public Contrat affectContratToEtudiant(Integer idContrat, String nomE, String prenomE) {
