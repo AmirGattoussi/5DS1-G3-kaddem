@@ -155,11 +155,11 @@
     <distributionManagement>
         <repository>
             <id>deploymentRepo</id>
-            <name>Nexus Repository</name>
+            <name>nexus-releases</name>
             <url> http://192.168.212.129:8081/repository/maven-releases/</url>
         </repository>
         <snapshotRepository>
-            <id>snapshotRepo</id> <!-- Identifier for the snapshot repository -->
+            <id>nexus-snapshots</id> <!-- Identifier for the snapshot repository -->
             <url>http://192.168.212.129:8081/repository/maven-snapshots/</url> <!-- URL for snapshot repo -->
         </snapshotRepository>
     </distributionManagement>
