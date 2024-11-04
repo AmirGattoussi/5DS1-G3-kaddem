@@ -27,17 +27,17 @@ services:
     volumes:
       - nexus-data:/nexus-data
 
-  mysqldb:
-    image: mysql:8.0
-    container_name: mysqldb
-    environment:
-      MYSQL_ROOT_PASSWORD: root   # Same as in your application.properties
-      MYSQL_DATABASE: kaddem      # The database name in your connection string
-      MYSQL_ROOT_HOST: "%"        # Allow root access from any host
+  db:
+    image: postgres:latest
+    container_name: postgres_db
     ports:
       - "3306:3306"
+    environment:
+      - POSTGRES_DB=kaddem
+      - POSTGRES_USER=root
+      - POSTGRES_PASSWORD=root
     volumes:
-      - mysqldb_data:/var/lib/mysql
+      - postgres_data:/var/lib/postgresql/data  
 
   sonarqube:
     image: sonarqube
@@ -52,7 +52,7 @@ services:
 volumes:
   grafana-data:
   nexus-data:
-  mysqldb_data:
+  postgres_data:
 
 #  springapp:
 #    image: neilmonastiri/neilmonastiri-5ds1-g3-kaddem
