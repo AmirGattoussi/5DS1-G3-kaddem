@@ -46,8 +46,8 @@ services:
       - "9000:9000"
     environment:
       - SONAR_JDBC_URL=jdbc:postgresql://db:3306/kaddem
-      - SONAR_JDBC_USERNAME=admin
-      - SONAR_JDBC_PASSWORD=dymce9-mernuk-hujmoX
+      - SONAR_JDBC_USERNAME=sonar
+      - SONAR_JDBC_PASSWORD=sonar
 
 volumes:
   grafana-data:
