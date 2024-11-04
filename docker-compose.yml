@@ -20,9 +20,8 @@ services:
       - ./prometheus.yml:/etc/prometheus/prometheus.yml
 
   nexus:
-    image: sonatype/nexus3
+    image: klo2k/nexus3
     container_name: nexus
-    platform: linux/arm64/v8
     ports:
       - "8081:8081"
     volumes:
