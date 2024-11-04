@@ -17,7 +17,7 @@ services:
     ports:
       - "9090:9090"
     volumes:
-      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+      - /home/vagrant/5DS1-G3-kaddem/prometheus.yml:/etc/prometheus/prometheus.yml
 
   nexus:
     image: klo2k/nexus3
