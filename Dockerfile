@@ -5,7 +5,7 @@ FROM openjdk:17-jdk-alpine
 WORKDIR /app
 
 # Copy the JAR file produced by the Maven build
-COPY target/5ds1-g3-kaddem-1.0.0.jar /app/5ds1-g3-kaddem.jar
+COPY target/5ds1-g3-kaddem-0.1.5-SNAPSHOT.jar /app/5ds1-g3-kaddem.jar
 
 # Expose the port your Spring app runs on (default is 8080)
 EXPOSE 8089
