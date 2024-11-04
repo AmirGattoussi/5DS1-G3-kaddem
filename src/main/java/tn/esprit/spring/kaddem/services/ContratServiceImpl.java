@@ -122,5 +122,10 @@ public class ContratServiceImpl implements IContratService {
 		}
 		return chiffreAffaireEntreDeuxDates;
 	}
+
+
+		public int countActiveContrats(List<ContratDTO> contracts) {
+			return (int) contracts.stream().filter(contract -> !contract.getArchive()).count();
+		}
 	}
 
