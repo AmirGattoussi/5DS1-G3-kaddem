@@ -1,0 +1,70 @@
+version: '3.8'
+
+services:
+  grafana:
+    image: grafana/grafana
+    container_name: grafana
+    ports:
+      - "3000:3000"
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin  # Set a password for Grafana admin
+    volumes:
+      - grafana-data:/var/lib/grafana
+
+  prometheus:
+    image: prom/prometheus
+    container_name: prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+
+  nexus:
+    image: klo2k/nexus3
+    container_name: nexus
+    ports:
+      - "8081:8081"
+    volumes:
+      - nexus-data:/nexus-data
+
+  mysqldb:
+    image: mysql:8.0
+    container_name: mysqldb
+    environment:
+      MYSQL_ROOT_PASSWORD: root   # Same as in your application.properties
+      MYSQL_DATABASE: kaddem      # The database name in your connection string
+      MYSQL_ROOT_HOST: "%"        # Allow root access from any host
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysqldb_data:/var/lib/mysql
+
+  sonarqube:
+    image: sonarqube
+    container_name: sonarqube
+    ports:
+      - "9000:9000"
+    environment:
+      - SONAR_JDBC_URL=jdbc:mysql://mysqldb:3306/kaddem
+      - SONAR_JDBC_USERNAME=admin
+      - SONAR_JDBC_PASSWORD=dymce9-mernuk-hujmoX
+
+volumes:
+  grafana-data:
+  nexus-data:
+  mysqldb_data:
+
+#  springapp:
+#    image: neilmonastiri/neilmonastiri-5ds1-g3-kaddem
+#    container_name: springapp
+#    depends_on:
+#      - mysqldb
+#    ports:
+#      - "8089:8089"
+#    environment:
+#      SPRING_DATASOURCE_URL: jdbc:mysql://mysqldb:3306/kaddem
+#      SPRING_DATASOURCE_USERNAME: root
+#      SPRING_DATASOURCE_PASSWORD: root
+#      SPRING_JPA_SHOW_SQL: "true"
+#      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+#      SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT: org.hibernate.dialect.MySQL5Dialect
