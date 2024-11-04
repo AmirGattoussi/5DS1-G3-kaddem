@@ -209,4 +209,17 @@ class ContratServiceImplTest {
 
         verify(contratRepository, never()).save(any());
     }
+
+    @Test
+    void testNbContratsValidesWithEdgeDates() {
+        Date startDate = new Date();
+        Date endDate = new Date();
+
+        when(contratRepository.getnbContratsValides(startDate, endDate)).thenReturn(1);
+
+        int result = contratService.nbContratsValides(startDate, endDate);
+        assertEquals(1, result);
+        verify(contratRepository, times(1)).getnbContratsValides(startDate, endDate);
+    }
+
 }
