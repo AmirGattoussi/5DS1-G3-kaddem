@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>DetailEquipeRestController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">5ds1-g3-kaddem</a> &gt; <a href="index.source.html" class="el_package">tn.esprit.spring.kaddem.controllers</a> &gt; <span class="el_source">DetailEquipeRestController.java</span></div><h1>DetailEquipeRestController.java</h1><pre class="source lang-java linenums">package tn.esprit.spring.kaddem.controllers;
+
+import lombok.AllArgsConstructor;
+import org.springframework.web.bind.annotation.*;
+import tn.esprit.spring.kaddem.dto.DetailEquipeDTO;
+import tn.esprit.spring.kaddem.entities.DetailEquipe;
+import tn.esprit.spring.kaddem.services.IDetailEquipeService;
+
+import java.util.List;
+
+@RestController
+@AllArgsConstructor
+@RequestMapping(&quot;/detailEquipe&quot;)
+public class DetailEquipeRestController {
+    IDetailEquipeService detailEquipeService;
+
+    // http://localhost:8089/kaddem/detailEquipe/retrieve-all-detailEquipes
+    @GetMapping(&quot;/retrieve-all-detailEquipes&quot;)
+    public List&lt;DetailEquipe&gt; getDetailEquipes() {
+<span class="fc" id="L20">        return detailEquipeService.retrieveAllDetailEquipes();</span>
+    }
+    // http://localhost:8089/kaddem/detailEquipe/retrieve-detailEquipe/1
+    @GetMapping(&quot;/retrieve-detailEquipe/{detailEquipe-id}&quot;)
+    public DetailEquipe retrieveDetailEquipe(@PathVariable(&quot;detailEquipe-id&quot;) Integer detailEquipeId) {
+<span class="fc" id="L25">        return detailEquipeService.retrieveDetailEquipe(detailEquipeId);</span>
+    }
+
+    // http://localhost:8089/kaddem/detailEquipe/remove-detailEquipe/1
+    @DeleteMapping(&quot;/remove-detailEquipe/{detailEquipe-id}&quot;)
+    public void removeDetailEquipe(@PathVariable(&quot;detailEquipe-id&quot;) Integer detailEquipeId) {
+<span class="fc" id="L31">        detailEquipeService.deleteDetailEquipe(detailEquipeId);</span>
+<span class="fc" id="L32">    }</span>
+
+    // http://localhost:8089/kaddem/detailEquipe/update-detailEquipe/8
+    @PutMapping(&quot;/update-detailEquipe/{detailEquipe-id}&quot;)
+    public DetailEquipe updateDetailEquipe(@RequestBody DetailEquipeDTO detailEquipeDTO, @PathVariable(&quot;detailEquipe-id&quot;) Integer idDetailEquipe) {
+<span class="fc" id="L37">        DetailEquipe detailEquipe = convertToEntity(detailEquipeDTO);</span>
+<span class="fc" id="L38">        return detailEquipeService.updateDetailEquipe(detailEquipe, idDetailEquipe);</span>
+    }
+
+    // http://localhost:8089/kaddem/detailEquipe/add-assign-detailEquipe-equipe/3
+    @PostMapping(value=&quot;/add-assign-detailEquipe-equipe/{equipeId}&quot;)
+    public void addAndAssignDetailEquipeToEquipe(@RequestBody DetailEquipeDTO detailEquipeDTO, @PathVariable(&quot;equipeId&quot;)Integer equipeId){
+<span class="fc" id="L44">        DetailEquipe detailEquipe = convertToEntity(detailEquipeDTO);</span>
+<span class="fc" id="L45">        detailEquipeService.addAndAssignDetailEquipeToEquipe(detailEquipe, equipeId);</span>
+<span class="fc" id="L46">    }</span>
+
+    public DetailEquipe convertToEntity(DetailEquipeDTO detailEquipeDTO) {
+<span class="fc" id="L49">        DetailEquipe detailEquipe = new DetailEquipe();</span>
+<span class="fc" id="L50">        detailEquipe.setIdDetailEquipe(detailEquipeDTO.getIdDetailEquipe());</span>
+<span class="fc" id="L51">        detailEquipe.setSalle(detailEquipeDTO.getSalle());</span>
+<span class="fc" id="L52">        detailEquipe.setThematique(detailEquipeDTO.getThematique());</span>
+<span class="fc" id="L53">        detailEquipe.setEquipe(detailEquipeDTO.getEquipe());</span>
+<span class="fc" id="L54">        return detailEquipe;</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.10.202304240956</span></div></body></html>
