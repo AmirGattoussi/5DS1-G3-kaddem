@@ -45,7 +45,7 @@ services:
     ports:
       - "9000:9000"
     environment:
-      - SONAR_JDBC_URL=jdbc:postgresql://db:3306/kaddem
+      - SONAR_JDBC_URL=jdbc:postgresql://db:5432/kaddem
       - SONAR_JDBC_USERNAME=sonar
       - SONAR_JDBC_PASSWORD=sonar
 
