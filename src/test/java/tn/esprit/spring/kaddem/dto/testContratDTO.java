@@ -42,6 +42,17 @@ class ContratDTOTest {
     }
 
     @Test
+    void testAllArgsConstructor() {
+        ContratDTO contratDTOAllArgs = new ContratDTO(2, startDate, endDate, Specialite.IA, true, 1000);
+        assertEquals(2, contratDTOAllArgs.getIdContrat());
+        assertEquals(startDate, contratDTOAllArgs.getDateDebutContrat());
+        assertEquals(endDate, contratDTOAllArgs.getDateFinContrat());
+        assertEquals(Specialite.IA, contratDTOAllArgs.getSpecialite());
+        assertTrue(contratDTOAllArgs.getArchive());
+        assertEquals(1000, contratDTOAllArgs.getMontantContrat());
+    }
+
+    @Test
     void testSettersAndGetters() {
         contratDTO.setIdContrat(2);
         contratDTO.setDateDebutContrat(startDate);
@@ -108,6 +119,18 @@ class ContratDTOTest {
     void testNullSpecialite() {
         contratDTO.setSpecialite(null);
         assertNull(contratDTO.getSpecialite(), "Specialite should allow null if no specialty is assigned.");
+    }
+
+    @Test
+    void testDifferentSpecialites() {
+        contratDTO.setSpecialite(Specialite.SECURITE);
+        assertEquals(Specialite.SECURITE, contratDTO.getSpecialite());
+        contratDTO.setSpecialite(Specialite.CLOUD);
+        assertEquals(Specialite.CLOUD, contratDTO.getSpecialite());
+        contratDTO.setSpecialite(Specialite.RESEAUX);
+        assertEquals(Specialite.RESEAUX, contratDTO.getSpecialite());
+        contratDTO.setSpecialite(Specialite.IA);
+        assertEquals(Specialite.IA, contratDTO.getSpecialite());
     }
 
     @Test
