@@ -31,11 +31,11 @@ services:
     image: postgres:latest
     container_name: postgres_db
     ports:
-      - "3306:3306"
+      - "5432:5432"
     environment:
       - POSTGRES_DB=kaddem
-      - POSTGRES_USER=root
-      - POSTGRES_PASSWORD=root
+      - POSTGRES_USER=sonar
+      - POSTGRES_PASSWORD=sonar
     volumes:
       - postgres_data:/var/lib/postgresql/data  
 
@@ -45,7 +45,7 @@ services:
     ports:
       - "9000:9000"
     environment:
-      - SONAR_JDBC_URL=jdbc:mysql://mysqldb:3306/kaddem
+      - SONAR_JDBC_URL=jdbc:postgresql://db:3306/kaddem
       - SONAR_JDBC_USERNAME=admin
       - SONAR_JDBC_PASSWORD=dymce9-mernuk-hujmoX
 
