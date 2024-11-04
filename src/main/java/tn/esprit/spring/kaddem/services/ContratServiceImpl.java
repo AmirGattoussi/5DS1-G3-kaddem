@@ -55,7 +55,7 @@ public class ContratServiceImpl implements IContratService {
 		Integer nbContratsActifs = 0;
 
 		for (Contrat contrat : contrats) {
-			if (contrat.getArchive() != null && contrat.getArchive()) {
+			if (contrat.getArchive() == null || contrat.getArchive()) {
 				nbContratsActifs++;
 			}
 		}
